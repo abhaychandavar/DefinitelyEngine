@@ -1,3 +1,4 @@
+#include "depch.h"
 #include "Event.h"
 
 namespace DefinitelyEngine {
@@ -8,11 +9,11 @@ namespace DefinitelyEngine {
             }
 
             EventType GetType() {
-                return EventType(MOUSE_MOVED);
+                return MOUSE_MOVED;
             }
 
             int GetCategories() {
-                return EventCategory(Mouse);
+                return Mouse;
             }
         
         protected:

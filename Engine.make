@@ -28,12 +28,13 @@ ifeq ($(origin AR), default)
   AR = ar
 endif
 RESCOMP = windres
-INCLUDES += -IEngine/src -IEngine/external/spdlog/include
+PCH = Engine/src/depch.h
+PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
+GCH = $(PCH_PLACEHOLDER).gch
+INCLUDES += -IEngine/src -IEngine/external/spdlog/include -IEngine/external/GLFW/include
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LIBS +=
-LDDEPS +=
 ALL_LDFLAGS += $(LDFLAGS) -arch x86_64 -dynamiclib -Wl,-install_name,@rpath/libEngine.dylib
 LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
 define PREBUILDCMDS
@@ -50,6 +51,8 @@ OBJDIR = bin-int/Debug-macosx-x86_64/Engine
 DEFINES += -DDE_DEBUG -DDE_PLATFORM_MAC -DDE_BUILD_DLL
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -arch x86_64 -fPIC -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -arch x86_64 -fPIC -g -std=c++17
+LIBS += Engine/external/GLFW/bin/Debug-macosx-x86_64/GLFW/libGLFW.a -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreGraphics -framework Carbon -framework QuartzCore
+LDDEPS += Engine/external/GLFW/bin/Debug-macosx-x86_64/GLFW/libGLFW.a
 
 else ifeq ($(config),release)
 TARGETDIR = bin/Release-macosx-x86_64/Engine
@@ -58,6 +61,8 @@ OBJDIR = bin-int/Release-macosx-x86_64/Engine
 DEFINES += -DDE_RELEASE -DDE_PLATFORM_MAC -DDE_BUILD_DLL
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -arch x86_64 -O2 -fPIC
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -arch x86_64 -O2 -fPIC -std=c++17
+LIBS += Engine/external/GLFW/bin/Release-macosx-x86_64/GLFW/libGLFW.a -framework Cocoa -framework IOKit -framework CoreFoundation -framework CoreGraphics -framework Carbon -framework QuartzCore
+LDDEPS += Engine/external/GLFW/bin/Release-macosx-x86_64/GLFW/libGLFW.a
 
 endif
 
@@ -73,10 +78,14 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Log.o
+GENERATED += $(OBJDIR)/MacWindow.o
 GENERATED += $(OBJDIR)/MouseEvent.o
+GENERATED += $(OBJDIR)/depch.o
 OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Log.o
+OBJECTS += $(OBJDIR)/MacWindow.o
 OBJECTS += $(OBJDIR)/MouseEvent.o
+OBJECTS += $(OBJDIR)/depch.o
 
 # Rules
 # #############################################
@@ -142,13 +151,19 @@ endif
 
 $(OBJDIR)/Application.o: Engine/src/DefinitelyEngine/Application.cpp
 	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/MouseEvent.o: Engine/src/DefinitelyEngine/Events/MouseEvent.cpp
 	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Log.o: Engine/src/DefinitelyEngine/Log.cpp
 	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/MacWindow.o: Engine/src/Platform/Mac/MacWindow.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/depch.o: Engine/src/depch.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))

@@ -14,6 +14,9 @@ workspace "DefinitelyEngine"
     filter {}
 
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
+
+include "Engine/external/GLFW"
+
 project "Engine"
     kind "SharedLib"
     language "C++"
@@ -21,6 +24,9 @@ project "Engine"
 
     targetdir ("bin/" .. outputDir)
     objdir    ("bin-int/" .. outputDir)
+
+    pchheader "depch.h"
+    pchsource "Engine/src/depch.cpp"
 
     files
     {
@@ -34,11 +40,21 @@ project "Engine"
         "Engine/external/*/include"
     }
 
+    links { "GLFW" }
+
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS", "DE_BUILD_DLL" }
 
     filter "system:macosx"
         defines { "DE_PLATFORM_MAC", "DE_BUILD_DLL" }
+        links {
+            "Cocoa.framework",
+            "IOKit.framework",
+            "CoreFoundation.framework",
+            "CoreGraphics.framework",
+            "Carbon.framework",
+            "QuartzCore.framework"
+        }
 
     filter "system:linux"
         defines { "DE_PLATFORM_LINUX", "DE_BUILD_DLL" }

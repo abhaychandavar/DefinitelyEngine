@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <chrono>
-
 #include "DefinitelyEngine/Core.h"
 
 enum EventType {
@@ -43,6 +40,10 @@ namespace DefinitelyEngine {
                 return std::chrono::duration_cast<std::chrono::milliseconds>(
                     this->timestamp.time_since_epoch()
                 ).count();
+            }
+
+            bool IsInCategory(EventCategory category) {
+                return this->GetCategories() & category;
             }
         
         protected:

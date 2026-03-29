@@ -1,3 +1,4 @@
+#include "depch.h"
 #include "Log.h"
 
 namespace DefinitelyEngine
