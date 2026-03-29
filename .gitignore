@@ -1,5 +1,6 @@
 .claude
 .vscode
+.cache
 
 build
 bin
