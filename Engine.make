@@ -73,8 +73,10 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Log.o
+GENERATED += $(OBJDIR)/MouseEvent.o
 OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Log.o
+OBJECTS += $(OBJDIR)/MouseEvent.o
 
 # Rules
 # #############################################
@@ -139,6 +141,9 @@ endif
 # #############################################
 
 $(OBJDIR)/Application.o: Engine/src/DefinitelyEngine/Application.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/MouseEvent.o: Engine/src/DefinitelyEngine/Events/MouseEvent.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Log.o: Engine/src/DefinitelyEngine/Log.cpp

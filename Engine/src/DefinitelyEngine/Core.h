@@ -15,3 +15,10 @@
 #else
     #error "Unsupported platform!"
 #endif
+
+#define Bit(x) (1 << x)
+
+struct Vector2
+{
+    float x, y;
+};
