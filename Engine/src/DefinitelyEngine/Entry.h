@@ -4,7 +4,10 @@ extern DefinitelyEngine::Application* DefinitelyEngine::CreateApplication();
 
 int main(int argc, char** argv)
 {
-    printf("Definitely Engine initialized\n");
+    DefinitelyEngine::Log::Init();
+    DE_CLIENT_INFO("Definitely engine initialized");
+    DE_CLIENT_WARN("Definitely engine initialized");
+
     auto app = DefinitelyEngine::CreateApplication();
     app->Run();
     delete app;
