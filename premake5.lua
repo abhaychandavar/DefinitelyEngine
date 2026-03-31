@@ -2,6 +2,7 @@ workspace "DefinitelyEngine"
     architecture "x64"
     configurations { "Debug", "Release" }
     startproject "Sandbox"
+    toolset "msc-v145"
 
     filter "configurations:Debug"
         defines { "DE_DEBUG" }
@@ -44,6 +45,11 @@ project "Engine"
 
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS", "DE_BUILD_DLL" }
+        buildoptions { "/utf-8" }
+        postbuildcommands
+        {
+            ("{COPY} %{cfg.buildtarget.relpath} bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Sandbox")
+        }
 
     filter "system:macosx"
         defines { "DE_PLATFORM_MAC", "DE_BUILD_DLL" }
@@ -85,6 +91,7 @@ project "Sandbox"
 
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS" }
+        buildoptions { "/utf-8" }
 
     filter "system:macosx"
         defines { "DE_PLATFORM_MAC" }

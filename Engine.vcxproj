@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\Debug-windows-x86_64\Engine\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\Debug-windows-x86_64\Engine\</IntDir>
+    <TargetName>Engine</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)bin\Release-windows-x86_64\Engine\</OutDir>
+    <IntDir>$(ProjectDir)bin-int\Release-windows-x86_64\Engine\</IntDir>
+    <TargetName>Engine</TargetName>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>DE_DEBUG;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLFW\include;Engine\external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>bin\Debug-windows-x86_64\Engine\Engine.lib</ImportLibrary>
+    </Link>
+    <ProjectReference>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>IF EXIST bin\Debug-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLFW\include;Engine\external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>bin\Release-windows-x86_64\Engine\Engine.lib</ImportLibrary>
+    </Link>
+    <ProjectReference>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\src\DefinitelyEngine.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Application.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Core.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Window.h" />
+    <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h" />
+    <ClInclude Include="Engine\src\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="Engine\src\depch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />
+    <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp" />
+    <ClCompile Include="Engine\src\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="Engine\src\depch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Engine\external\GLFW\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

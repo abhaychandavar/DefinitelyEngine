@@ -2,22 +2,22 @@
 
 #include "DefinitelyEngine/Core.h"
 
-enum EventType {
-    MOUSE_MOVED,
-    MOUSE_SCROLLED,
-    KEY_PRESSED,
-    KEY_RELEASED,
-    MOUSE_BUTTON_PRESSED,
-    MOUSE_BUTTON_RELEASED
+namespace DefinitelyEngine {
+
+enum class EventType {
+    MouseMoved,
+    MouseScrolled,
+    KeyPressed,
+    KeyReleased,
+    MouseButtonPressed,
+    MouseButtonReleased
 };
 
-enum EventCategory {
+enum class EventCategory {
     Mouse = Bit(0),
     MouseButton = Bit(1),
     Keyboard = Bit(2)
 };
-
-namespace DefinitelyEngine {
     class DEFINITELY_ENGINE_API Event {
         public:
             Event() {
@@ -43,7 +43,7 @@ namespace DefinitelyEngine {
             }
 
             bool IsInCategory(EventCategory category) {
-                return this->GetCategories() & category;
+                return this->GetCategories() & static_cast<int>(category);
             }
         
         protected:

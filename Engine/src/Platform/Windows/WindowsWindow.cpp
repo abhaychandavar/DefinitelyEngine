@@ -1,6 +1,6 @@
 #include "depch.h"
-#ifdef DE_PLATFORM_MAC
-#include "MacWindow.h"
+#ifdef DE_PLATFORM_WINDOWS
+#include "WindowsWindow.h"
 #include "DefinitelyEngine/Log.h"
 
 namespace DefinitelyEngine
@@ -13,17 +13,17 @@ namespace DefinitelyEngine
     }
 
     Window* Window::Create(const WindowProps& props) {
-        return new MacWindow(props);
+        return new WindowsWindow(props);
     }
 
-    MacWindow::MacWindow(const WindowProps& props) {
+    WindowsWindow::WindowsWindow(const WindowProps& props) {
         Init(props);
     }
-    MacWindow::~MacWindow() {
+    WindowsWindow::~WindowsWindow() {
         Shutdown();
     }
 
-    void MacWindow::Init(const WindowProps& props) {
+    void WindowsWindow::Init(const WindowProps& props) {
         m_Data.Title = props.Title;
         m_Data.Height = props.Height;
         m_Data.Width = props.Width;
@@ -51,7 +51,7 @@ namespace DefinitelyEngine
         SetVSync(true);
     }
 
-    void MacWindow::Shutdown() {
+    void WindowsWindow::Shutdown() {
         glfwDestroyWindow(m_Window);
     }
 
@@ -60,16 +60,16 @@ namespace DefinitelyEngine
         DE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    void MacWindow::SetEventCallback() {
+    void WindowsWindow::SetEventCallback() {
         
     }
 
-    void MacWindow::OnUpdate() {
+    void WindowsWindow::OnUpdate() {
         glfwPollEvents();
         glfwSwapBuffers(m_Window);
     }
 
-    void MacWindow::SetVSync(bool enabled) {
+    void WindowsWindow::SetVSync(bool enabled) {
         if (enabled)
             glfwSwapInterval(1);
         else
@@ -78,8 +78,8 @@ namespace DefinitelyEngine
         m_Data.Vsync = enabled;
     }
 
-    bool MacWindow::IsVsync() const {
+    bool WindowsWindow::IsVsync() const {
         return m_Data.Vsync;
     }
 } // namespace DefinitelyEngine
-#endif // DE_PLATFORM_MAC
+#endif // DE_PLATFORM_WINDOWS

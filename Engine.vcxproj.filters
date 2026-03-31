@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DefinitelyEngine">
+      <UniqueIdentifier>{E8D025CD-D4C9-441F-FDFB-29A4E953242B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitelyEngine\Events">
+      <UniqueIdentifier>{CC679A55-389F-E2EC-41A9-4610AD5F09E6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Mac">
+      <UniqueIdentifier>{6A66A7CC-56C9-3671-FF4E-6F27EB9002F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\src\DefinitelyEngine.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Application.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Core.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Log.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Window.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h">
+      <Filter>Platform\Mac</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\depch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp">
+      <Filter>DefinitelyEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp">
+      <Filter>DefinitelyEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp">
+      <Filter>Platform\Mac</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\depch.cpp" />
+  </ItemGroup>
+</Project>

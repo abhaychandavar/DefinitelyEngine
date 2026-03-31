@@ -9,11 +9,11 @@ namespace DefinitelyEngine {
             }
 
             EventType GetType() {
-                return MOUSE_MOVED;
+                return EventType::MouseMoved;
             }
 
             int GetCategories() {
-                return Mouse;
+                return static_cast<int>(EventCategory::Mouse);
             }
         
         protected:

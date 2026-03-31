@@ -1,0 +1,2 @@
+# Premake build tool binary
+external/premake/premake5.exe binary
