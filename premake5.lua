@@ -2,7 +2,9 @@ workspace "DefinitelyEngine"
     architecture "x64"
     configurations { "Debug", "Release" }
     startproject "Sandbox"
-    toolset "msc-v145"
+
+    filter "system:windows"
+        toolset "msc-v145"
 
     filter "configurations:Debug"
         defines { "DE_DEBUG" }
