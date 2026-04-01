@@ -10,13 +10,17 @@ enum class EventType {
     KeyPressed,
     KeyReleased,
     MouseButtonPressed,
-    MouseButtonReleased
+    MouseButtonReleased,
+
+    // Window
+    WindowClose
 };
 
 enum class EventCategory {
     Mouse = Bit(0),
     MouseButton = Bit(1),
-    Keyboard = Bit(2)
+    Keyboard = Bit(2),
+    Window = Bit(3)
 };
     class DEFINITELY_ENGINE_API Event {
         public:

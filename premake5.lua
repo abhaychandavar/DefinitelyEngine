@@ -16,6 +16,7 @@ workspace "DefinitelyEngine"
 
     filter {}
 
+outputBaseDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 
 include "Engine/external/GLFW"
@@ -50,7 +51,8 @@ project "Engine"
         buildoptions { "/utf-8" }
         postbuildcommands
         {
-            ("{COPY} %{cfg.buildtarget.relpath} bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/Sandbox")
+            ("{MKDIR} bin/" .. outputBaseDir .. "/Sandbox"),
+            ("{COPY} %{cfg.buildtarget.relpath} bin/" .. outputBaseDir .. "/Sandbox")
         }
 
     filter "system:macosx"

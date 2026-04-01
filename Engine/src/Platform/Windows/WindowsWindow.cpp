@@ -2,6 +2,7 @@
 #ifdef DE_PLATFORM_WINDOWS
 #include "WindowsWindow.h"
 #include "DefinitelyEngine/Log.h"
+#include "DefinitelyEngine/Events/WindowClose.h"
 
 namespace DefinitelyEngine
 {
@@ -49,6 +50,13 @@ namespace DefinitelyEngine
         glfwMakeContextCurrent(m_Window);
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
+
+        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
+            DE_CORE_INFO("CLOSE WINDOW");
+            DefinitelyEngine::WindowClose event;
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            data.EventCallback(event);
+        });
     }
 
     void WindowsWindow::Shutdown() {
@@ -58,10 +66,6 @@ namespace DefinitelyEngine
     static void KeyCallback(int error, const char* description)
     {
         DE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-    }
-
-    void WindowsWindow::SetEventCallback() {
-        
     }
 
     void WindowsWindow::OnUpdate() {

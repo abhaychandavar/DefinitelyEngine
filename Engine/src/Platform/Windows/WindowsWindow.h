@@ -16,7 +16,7 @@ namespace DefinitelyEngine {
             void SetVSync(bool enabled) override;
             bool IsVsync() const;
 
-            void SetEventCallback();
+            void SetEventCallback(std::function<void(Event&)> func) override { this->m_Data.EventCallback = func; };
 
         private:
             virtual void Init(const WindowProps& props);
@@ -28,6 +28,8 @@ namespace DefinitelyEngine {
                 std::string Title;
                 unsigned int Width, Height;
                 bool Vsync;
+
+                std::function<void(Event&)> EventCallback;
             };
 
             WindowData m_Data;

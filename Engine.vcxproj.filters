@@ -31,6 +31,9 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h">
       <Filter>DefinitelyEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>

@@ -12,10 +12,14 @@ namespace DefinitelyEngine
       virtual ~Application();
 
       void Run();
-    
+
     private:
       std::unique_ptr<Window> m_Window;
       bool Running;
+      
+      void OnEvent(Event& e);
+
+      void OnClose();
   };
 
   Application* CreateApplication();

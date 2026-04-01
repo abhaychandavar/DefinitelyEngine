@@ -74,7 +74,8 @@
     <ProjectReference>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>IF EXIST bin\Debug-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF NOT EXIST bin\Debug-windows-x86_64\Sandbox (mkdir bin\Debug-windows-x86_64\Sandbox)
+IF EXIST bin\Debug-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Debug-windows-x86_64\Engine\Engine.dll bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -102,7 +103,8 @@
     <ProjectReference>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF NOT EXIST bin\Release-windows-x86_64\Sandbox (mkdir bin\Release-windows-x86_64\Sandbox)
+IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I bin\Release-windows-x86_64\Engine\Engine.dll bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -111,6 +113,7 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Core.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h" />
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h" />

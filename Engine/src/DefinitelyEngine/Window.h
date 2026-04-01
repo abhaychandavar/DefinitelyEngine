@@ -26,7 +26,7 @@ namespace DefinitelyEngine {
             virtual unsigned int GetWidth() const = 0;
             virtual unsigned int GetHeight() const = 0;
 
-            virtual void SetEventCallback() = 0;
+            virtual void SetEventCallback(std::function<void(Event&)> func) = 0;
             virtual void SetVSync(bool enabled) = 0;
             virtual bool IsVsync() const = 0;
 
