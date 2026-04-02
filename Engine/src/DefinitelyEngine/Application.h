@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Window.h"
+#include "LayerStack.h"
 
 namespace DefinitelyEngine
 {
@@ -13,13 +14,21 @@ namespace DefinitelyEngine
 
       void Run();
 
+      void PushLayer(Layer* layer);
+      void PushOverlay(Layer* overlay);
+
+      inline Window& GetWindow() { return *m_Window; }
+      inline static Application& Get() { return *s_Instance; }
+
     private:
       std::unique_ptr<Window> m_Window;
+      LayerStack m_LayerStack;
       bool Running;
-      
-      void OnEvent(Event& e);
 
+      void OnEvent(Event& e);
       void OnClose();
+
+      static Application* s_Instance;
   };
 
   Application* CreateApplication();

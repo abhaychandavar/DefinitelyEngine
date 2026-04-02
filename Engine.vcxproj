@@ -58,8 +58,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DE_DEBUG;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLFW\include;Engine\external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DE_DEBUG;DE_ENABLE_ASSERTS;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -83,8 +83,8 @@ IF EXIST bin\Debug-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Debu
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLFW\include;Engine\external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -113,7 +113,13 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Core.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\KeyEvent.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\MouseEvent.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowResizeEvent.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Layer.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\LayerStack.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h" />
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h" />
@@ -123,6 +129,8 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
   <ItemGroup>
     <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp" />
     <ClCompile Include="Engine\src\Platform\Windows\WindowsWindow.cpp" />
@@ -133,6 +141,12 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
   <ItemGroup>
     <ProjectReference Include="Engine\external\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Engine\external\GLAD\GLAD.vcxproj">
+      <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Engine\external\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

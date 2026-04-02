@@ -1,5 +1,6 @@
 #include "depch.h"
 #include "DefinitelyEngine/Window.h"
+
 #include <GLFW/glfw3.h>
 
 namespace DefinitelyEngine {
@@ -15,6 +16,8 @@ namespace DefinitelyEngine {
 
             void SetVSync(bool enabled) override;
             bool IsVsync() const;
+
+            inline void* GetNativeWindow() const override { return m_Window; }
 
             void SetEventCallback(std::function<void(Event&)> func) override { this->m_Data.EventCallback = func; };
 

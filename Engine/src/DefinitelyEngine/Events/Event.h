@@ -13,7 +13,8 @@ enum class EventType {
     MouseButtonReleased,
 
     // Window
-    WindowClose
+    WindowClose,
+    WindowResize
 };
 
 enum class EventCategory {
@@ -24,6 +25,8 @@ enum class EventCategory {
 };
     class DEFINITELY_ENGINE_API Event {
         public:
+            bool Handled = false;
+
             Event() {
                 this->timestamp = std::chrono::steady_clock::now();
             }

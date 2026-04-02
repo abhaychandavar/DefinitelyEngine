@@ -18,6 +18,15 @@
 
 #define Bit(x) (1 << x)
 
+#ifdef DE_PLATFORM_WINDOWS
+    #define DE_DEBUGBREAK() __debugbreak()
+#elif defined(DE_PLATFORM_MAC) || defined(DE_PLATFORM_LINUX)
+    #include <signal.h>
+    #define DE_DEBUGBREAK() raise(SIGTRAP)
+#else
+    #error "DE_DEBUGBREAK not supported on this platform!"
+#endif
+
 struct Vector2
 {
     float x, y;

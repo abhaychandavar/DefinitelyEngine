@@ -7,7 +7,7 @@ workspace "DefinitelyEngine"
         toolset "msc-v145"
 
     filter "configurations:Debug"
-        defines { "DE_DEBUG" }
+        defines { "DE_DEBUG", "DE_ENABLE_ASSERTS" }
         symbols "On"
 
     filter "configurations:Release"
@@ -20,6 +20,8 @@ outputBaseDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 
 include "Engine/external/GLFW"
+include "Engine/external/GLAD"
+include "Engine/external/imgui"
 
 project "Engine"
     kind "SharedLib"
@@ -41,13 +43,14 @@ project "Engine"
     includedirs
     {
         "Engine/src",
-        "Engine/external/*/include"
+        "Engine/external/*/include",
+        "Engine/external/imgui"
     }
 
-    links { "GLFW" }
+    links { "GLFW", "GLAD", "ImGui" }
 
     filter "system:windows"
-        defines { "DE_PLATFORM_WINDOWS", "DE_BUILD_DLL" }
+        defines { "DE_PLATFORM_WINDOWS", "DE_BUILD_DLL", "GLFW_INCLUDE_NONE" }
         buildoptions { "/utf-8" }
         postbuildcommands
         {
@@ -56,7 +59,7 @@ project "Engine"
         }
 
     filter "system:macosx"
-        defines { "DE_PLATFORM_MAC", "DE_BUILD_DLL" }
+        defines { "DE_PLATFORM_MAC", "DE_BUILD_DLL", "GLFW_INCLUDE_NONE" }
         links {
             "Cocoa.framework",
             "IOKit.framework",
@@ -67,7 +70,7 @@ project "Engine"
         }
 
     filter "system:linux"
-        defines { "DE_PLATFORM_LINUX", "DE_BUILD_DLL" }
+        defines { "DE_PLATFORM_LINUX", "DE_BUILD_DLL", "GLFW_INCLUDE_NONE" }
 
     filter {}
 

@@ -4,3 +4,6 @@
 [submodule "Engine/external/GLFW"]
 	path = Engine/external/GLFW
 	url = git@github.com:abhaychandavar/glfw.git
+[submodule "Engine/external/imgui"]
+	path = Engine/external/imgui
+	url = git@github.com:abhaychandavar/imgui.git

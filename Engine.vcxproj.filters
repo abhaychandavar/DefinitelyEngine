@@ -7,6 +7,9 @@
     <Filter Include="DefinitelyEngine\Events">
       <UniqueIdentifier>{CC679A55-389F-E2EC-41A9-4610AD5F09E6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\ImGui">
+      <UniqueIdentifier>{125411DC-FE4D-3A2E-E7BA-D03ED353A09A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
@@ -31,8 +34,26 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h">
       <Filter>DefinitelyEngine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\KeyEvent.h">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\MouseEvent.h">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h">
       <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowResizeEvent.h">
+      <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h">
+      <Filter>DefinitelyEngine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Layer.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\LayerStack.h">
+      <Filter>DefinitelyEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h">
       <Filter>DefinitelyEngine</Filter>
@@ -54,6 +75,12 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp">
       <Filter>DefinitelyEngine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.cpp">
+      <Filter>DefinitelyEngine\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp">
+      <Filter>DefinitelyEngine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp">
       <Filter>DefinitelyEngine</Filter>

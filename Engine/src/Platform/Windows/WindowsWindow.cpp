@@ -3,6 +3,11 @@
 #include "WindowsWindow.h"
 #include "DefinitelyEngine/Log.h"
 #include "DefinitelyEngine/Events/WindowClose.h"
+#include "DefinitelyEngine/Events/WindowResizeEvent.h"
+#include "DefinitelyEngine/Events/MouseEvent.h"
+#include "DefinitelyEngine/Events/KeyEvent.h"
+
+#include <glad/glad.h>
 
 namespace DefinitelyEngine
 {
@@ -43,19 +48,63 @@ namespace DefinitelyEngine
 
         m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
-        if (!m_Window) {
-            DE_CORE_ERROR("Window initialization failed");
-        }
+        DE_CORE_ASSERT(m_Window, "Window initialization failed");
 
         glfwMakeContextCurrent(m_Window);
+
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        DE_CORE_ASSERT(status, "Failed to initialize GLAD");
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
-            DE_CORE_INFO("CLOSE WINDOW");
-            DefinitelyEngine::WindowClose event;
             WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            WindowClose event;
             data.EventCallback(event);
+        });
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            data.Width = (unsigned int)width;
+            data.Height = (unsigned int)height;
+            WindowResizeEvent event((unsigned int)width, (unsigned int)height);
+            data.EventCallback(event);
+        });
+
+        glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+                int repeatCount = (action == GLFW_REPEAT) ? 1 : 0;
+                KeyPressedEvent event(key, repeatCount);
+                data.EventCallback(event);
+            } else if (action == GLFW_RELEASE) {
+                KeyReleasedEvent event(key);
+                data.EventCallback(event);
+            }
+        });
+
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            MouseMovedEvent event((float)xpos, (float)ypos);
+            data.EventCallback(event);
+        });
+
+        glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xoffset, double yoffset) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            MouseScrolledEvent event((float)xoffset, (float)yoffset);
+            data.EventCallback(event);
+        });
+
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
+            WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+            if (action == GLFW_PRESS) {
+                MouseButtonPressedEvent event(button);
+                data.EventCallback(event);
+            } else if (action == GLFW_RELEASE) {
+                MouseButtonReleasedEvent event(button);
+                data.EventCallback(event);
+            }
         });
     }
 
