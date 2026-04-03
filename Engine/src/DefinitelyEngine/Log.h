@@ -27,15 +27,15 @@ namespace DefinitelyEngine {
 #define DE_CORE_FATAL(...)::DefinitelyEngine::Log::GetCoreLogger()->fatal(__VA_ARGS__)
 
 
-#define DE_CLIENT_ERROR(...)::DefinitelyEngine::Log::GetClientLogger()->error(__VA_ARGS__)
-#define DE_CLIENT_WARN(...)::DefinitelyEngine::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define DE_CLIENT_INFO(...)::DefinitelyEngine::Log::GetClientLogger()->info(__VA_ARGS__)
-#define DE_CLIENT_TRACE(...)::DefinitelyEngine::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define DE_CLIENT_FATAL(...)::DefinitelyEngine::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define DE_ERROR(...)::DefinitelyEngine::Log::GetClientLogger()->error(__VA_ARGS__)
+#define DE_WARN(...)::DefinitelyEngine::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define DE_INFO(...)::DefinitelyEngine::Log::GetClientLogger()->info(__VA_ARGS__)
+#define DE_TRACE(...)::DefinitelyEngine::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define DE_FATAL(...)::DefinitelyEngine::Log::GetClientLogger()->fatal(__VA_ARGS__)
 
 #ifdef DE_ENABLE_ASSERTS
     #define DE_CORE_ASSERT(x, ...) { if(!(x)) { DE_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); DE_DEBUGBREAK(); } }
-    #define DE_ASSERT(x, ...)      { if(!(x)) { DE_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); DE_DEBUGBREAK(); } }
+    #define DE_ASSERT(x, ...)      { if(!(x)) { DE_ERROR("Assertion Failed: {0}", __VA_ARGS__); DE_DEBUGBREAK(); } }
 #else
     #define DE_CORE_ASSERT(x, ...)
     #define DE_ASSERT(x, ...)

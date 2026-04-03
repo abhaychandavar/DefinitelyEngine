@@ -7,7 +7,6 @@
 #include "DefinitelyEngine/Events/MouseEvent.h"
 #include "DefinitelyEngine/Events/KeyEvent.h"
 
-#include <glad/glad.h>
 
 namespace DefinitelyEngine
 {
@@ -50,10 +49,8 @@ namespace DefinitelyEngine
 
         DE_CORE_ASSERT(m_Window, "Window initialization failed");
 
-        glfwMakeContextCurrent(m_Window);
-
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        DE_CORE_ASSERT(status, "Failed to initialize GLAD");
+        m_Context = std::unique_ptr<GraphicsContext>(GraphicsContext::Create(m_Window));
+        m_Context->Init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
         SetVSync(true);
@@ -119,7 +116,7 @@ namespace DefinitelyEngine
 
     void WindowsWindow::OnUpdate() {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers();
     }
 
     void WindowsWindow::SetVSync(bool enabled) {

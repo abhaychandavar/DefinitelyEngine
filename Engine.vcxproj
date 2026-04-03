@@ -59,7 +59,7 @@
       <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_DEBUG;DE_ENABLE_ASSERTS;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -84,7 +84,7 @@ IF EXIST bin\Debug-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Debu
       <PrecompiledHeaderFile>depch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;DE_BUILD_DLL;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\imgui;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,11 +118,15 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowResizeEvent.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Input.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\KeyCodes.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Layer.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\LayerStack.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h" />
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h" />
+    <ClInclude Include="Engine\src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="Engine\src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="Engine\src\depch.h" />
   </ItemGroup>
@@ -133,6 +137,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp" />
+    <ClCompile Include="Engine\src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="Engine\src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="Engine\src\depch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

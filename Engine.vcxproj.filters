@@ -49,6 +49,12 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h">
       <Filter>DefinitelyEngine\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Input.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\KeyCodes.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Layer.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
@@ -58,11 +64,17 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h">
+      <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h">
       <Filter>Platform\Mac</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\Windows\WindowsInput.h">
+      <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
@@ -87,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp">
       <Filter>Platform\Mac</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\Windows\WindowsInput.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>

@@ -1,5 +1,6 @@
 #include "depch.h"
 #include "DefinitelyEngine/Window.h"
+#include "DefinitelyEngine/Renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -26,6 +27,7 @@ namespace DefinitelyEngine {
             virtual void Shutdown();
             
             GLFWwindow* m_Window;
+            std::unique_ptr<GraphicsContext> m_Context;
 
             struct WindowData {
                 std::string Title;

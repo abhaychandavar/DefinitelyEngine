@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Window.h"
 #include "LayerStack.h"
+#include "ImGui/ImGuiLayer.h"
 
 namespace DefinitelyEngine
 {
@@ -23,6 +24,7 @@ namespace DefinitelyEngine
     private:
       std::unique_ptr<Window> m_Window;
       LayerStack m_LayerStack;
+      ImGuiLayer* m_ImGuiLayer;
       bool Running;
 
       void OnEvent(Event& e);

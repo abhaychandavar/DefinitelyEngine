@@ -7,7 +7,7 @@ extern DefinitelyEngine::Application* DefinitelyEngine::CreateApplication();
 int main(int argc, char** argv)
 {
     DefinitelyEngine::Log::Init();
-    DE_CLIENT_INFO("Definitely engine initialized");
+    DE_INFO("Definitely engine initialized");
     
     auto app = DefinitelyEngine::CreateApplication();
     app->Run();

@@ -44,7 +44,8 @@ project "Engine"
     {
         "Engine/src",
         "Engine/external/*/include",
-        "Engine/external/imgui"
+        "Engine/external/imgui",
+        "Engine/external/GLM"
     }
 
     links { "GLFW", "GLAD", "ImGui" }
@@ -91,7 +92,8 @@ project "Sandbox"
     includedirs
     {
         "Engine/src",
-        "Engine/external/*/include"
+        "Engine/external/*/include",
+        "Engine/external/GLM"
     }
 
     links { "Engine" }

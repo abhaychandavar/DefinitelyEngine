@@ -6,6 +6,8 @@
 #include "Events/WindowResizeEvent.h"
 #include "Log.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Input.h"
+#include "Renderer/RenderCommand.h"
 
 namespace DefinitelyEngine {
 
@@ -16,39 +18,39 @@ namespace DefinitelyEngine {
         ApplicationLayer() : Layer("ApplicationLayer") {}
 
         void OnEvent(Event& e) override {
-            switch (e.GetType()) {
-                case EventType::MouseMoved: {
-                    auto& me = static_cast<MouseMovedEvent&>(e);
-                    DE_CORE_TRACE("MouseMoved: ({}, {})", me.GetX(), me.GetY());
-                    break;
-                }
-                case EventType::MouseScrolled: {
-                    auto& se = static_cast<MouseScrolledEvent&>(e);
-                    DE_CORE_TRACE("MouseScrolled: ({}, {})", se.GetXOffset(), se.GetYOffset());
-                    break;
-                }
-                case EventType::MouseButtonPressed: {
-                    auto& mbe = static_cast<MouseButtonPressedEvent&>(e);
-                    DE_CORE_TRACE("MouseButtonPressed: button {}", mbe.GetButton());
-                    break;
-                }
-                case EventType::MouseButtonReleased: {
-                    auto& mbe = static_cast<MouseButtonReleasedEvent&>(e);
-                    DE_CORE_TRACE("MouseButtonReleased: button {}", mbe.GetButton());
-                    break;
-                }
-                case EventType::KeyPressed: {
-                    auto& ke = static_cast<KeyPressedEvent&>(e);
-                    DE_CORE_TRACE("KeyPressed: keycode {} (repeats: {})", ke.GetKeyCode(), ke.GetRepeatCount());
-                    break;
-                }
-                case EventType::KeyReleased: {
-                    auto& ke = static_cast<KeyReleasedEvent&>(e);
-                    DE_CORE_TRACE("KeyReleased: keycode {}", ke.GetKeyCode());
-                    break;
-                }
-                default: break;
-            }
+            // switch (e.GetType()) {
+            //     case EventType::MouseMoved: {
+            //         auto& me = static_cast<MouseMovedEvent&>(e);
+            //         DE_CORE_TRACE("MouseMoved: ({}, {})", me.GetX(), me.GetY());
+            //         break;
+            //     }
+            //     case EventType::MouseScrolled: {
+            //         auto& se = static_cast<MouseScrolledEvent&>(e);
+            //         DE_CORE_TRACE("MouseScrolled: ({}, {})", se.GetXOffset(), se.GetYOffset());
+            //         break;
+            //     }
+            //     case EventType::MouseButtonPressed: {
+            //         auto& mbe = static_cast<MouseButtonPressedEvent&>(e);
+            //         DE_CORE_TRACE("MouseButtonPressed: button {}", mbe.GetButton());
+            //         break;
+            //     }
+            //     case EventType::MouseButtonReleased: {
+            //         auto& mbe = static_cast<MouseButtonReleasedEvent&>(e);
+            //         DE_CORE_TRACE("MouseButtonReleased: button {}", mbe.GetButton());
+            //         break;
+            //     }
+            //     case EventType::KeyPressed: {
+            //         auto& ke = static_cast<KeyPressedEvent&>(e);
+            //         DE_CORE_TRACE("KeyPressed: keycode {} (repeats: {})", ke.GetKeyCode(), ke.GetRepeatCount());
+            //         break;
+            //     }
+            //     case EventType::KeyReleased: {
+            //         auto& ke = static_cast<KeyReleasedEvent&>(e);
+            //         DE_CORE_TRACE("KeyReleased: keycode {}", ke.GetKeyCode());
+            //         break;
+            //     }
+            //     default: break;
+            // }
         }
     };
 
@@ -58,8 +60,10 @@ namespace DefinitelyEngine {
         m_Window = std::unique_ptr<Window>(Window::Create());
         m_Window->SetEventCallback([this](Event& e){
             OnEvent(e); });
+        RenderCommand::Init();
         PushLayer(new ApplicationLayer());
-        PushOverlay(new ImGuiLayer());
+        m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
     }
 
     Application::~Application()
@@ -102,8 +106,17 @@ namespace DefinitelyEngine {
     void Application::Run() {
         this->Running = true;
         while(this->Running) {
+            RenderCommand::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            RenderCommand::Clear();
+
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate();
+
+            m_ImGuiLayer->Begin();
+            for (Layer* layer : m_LayerStack)
+                layer->OnImGuiRender();
+            m_ImGuiLayer->End();
+
             m_Window->OnUpdate();
         }
     }
