@@ -10,11 +10,17 @@
     <Filter Include="DefinitelyEngine\ImGui">
       <UniqueIdentifier>{125411DC-FE4D-3A2E-E7BA-D03ED353A09A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\Renderer">
+      <UniqueIdentifier>{8E99CE1C-FA5B-02A7-430C-9133AF0DDB84}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Mac">
       <UniqueIdentifier>{6A66A7CC-56C9-3671-FF4E-6F27EB9002F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
@@ -67,11 +73,38 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\GraphicsContext.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\RenderCommand.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\RendererAPI.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\Shader.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\VertexBuffer.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h">
       <Filter>Platform\Mac</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLVertexBufferApi.h">
+      <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\Windows\WindowsInput.h">
       <Filter>Platform\Windows</Filter>
@@ -97,8 +130,32 @@
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp">
       <Filter>DefinitelyEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\RenderCommand.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\RendererAPI.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\Shader.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\VertexBuffer.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp">
       <Filter>Platform\Mac</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLVertexBufferApi.cpp">
+      <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\Windows\WindowsInput.cpp">
       <Filter>Platform\Windows</Filter>

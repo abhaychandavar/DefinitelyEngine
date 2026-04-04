@@ -1,5 +1,6 @@
 #include "depch.h"
 #include "OpenGLRendererAPI.h"
+#include "DefinitelyEngine/Log.h"
 
 #include <glad/glad.h>
 
@@ -16,6 +17,17 @@ namespace DefinitelyEngine {
 
     void OpenGLRendererAPI::Clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void OpenGLRendererAPI::DrawArrays(PrimitiveType primitive, int count) {
+        static auto ToGLPrimitive = [](PrimitiveType type) -> GLenum {
+            switch (type) {
+                case PrimitiveType::Triangles: return GL_TRIANGLES;
+                case PrimitiveType::Lines:     return GL_LINE_STRIP;
+                case PrimitiveType::Points:    return GL_POINTS;
+            }
+        };
+        glDrawArrays(ToGLPrimitive(primitive), 0, count);
     }
 
 }

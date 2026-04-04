@@ -18,6 +18,12 @@ namespace DefinitelyEngine {
             s_RendererAPI->Clear();
         }
 
+        inline static void DrawArrays(RendererAPI::PrimitiveType primitive, int count) {
+            s_RendererAPI->DrawArrays(primitive, count);
+        }
+
+
+
     private:
         static RendererAPI* s_RendererAPI;
     };

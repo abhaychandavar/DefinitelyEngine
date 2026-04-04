@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_DEBUG;DE_ENABLE_ASSERTS;DE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -71,13 +71,16 @@
     </Link>
     <ProjectReference>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Debug-windows-x86_64\$(ProjectName)\Shaders</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -94,8 +97,19 @@
     </Link>
     <ProjectReference>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Release-windows-x86_64\$(ProjectName)\Shaders</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Sandbox\src\Editor\EditorLayer.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\Triangle.h" />
+    <ClInclude Include="Sandbox\src\Game\GameLayer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sandbox\src\Editor\EditorLayer.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\Triangle.cpp" />
+    <ClCompile Include="Sandbox\src\Game\GameLayer.cpp" />
     <ClCompile Include="Sandbox\src\Sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>

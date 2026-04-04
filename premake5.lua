@@ -91,6 +91,7 @@ project "Sandbox"
 
     includedirs
     {
+        "Sandbox/src",
         "Engine/src",
         "Engine/external/*/include",
         "Engine/external/GLM"
@@ -101,11 +102,23 @@ project "Sandbox"
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS" }
         buildoptions { "/utf-8" }
+        postbuildcommands
+        {
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+        }
 
     filter "system:macosx"
         defines { "DE_PLATFORM_MAC" }
+        postbuildcommands
+        {
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+        }
 
     filter "system:linux"
         defines { "DE_PLATFORM_LINUX" }
+        postbuildcommands
+        {
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+        }
 
     filter {}
