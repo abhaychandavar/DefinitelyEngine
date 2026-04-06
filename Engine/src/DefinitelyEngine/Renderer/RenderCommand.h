@@ -22,6 +22,10 @@ namespace DefinitelyEngine {
             s_RendererAPI->DrawArrays(primitive, count);
         }
 
+        inline static void DrawIndexed(RendererAPI::PrimitiveType primitive, unsigned int count) {
+            s_RendererAPI->DrawIndexed(primitive, count);
+        }
+
 
 
     private:

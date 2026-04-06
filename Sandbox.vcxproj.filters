@@ -15,10 +15,28 @@
     <ClInclude Include="Sandbox\src\Editor\EditorLayer.h">
       <Filter>Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Entities\Cube.h">
+      <Filter>Game\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Entities\Plane.h">
+      <Filter>Game\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Entities\Square.h">
+      <Filter>Game\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Entities\SquareIndexBuffer.h">
+      <Filter>Game\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Entities\SquareTextured.h">
+      <Filter>Game\Entities</Filter>
+    </ClInclude>
     <ClInclude Include="Sandbox\src\Game\Entities\Triangle.h">
       <Filter>Game\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Sandbox\src\Game\GameLayer.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\MainCamera.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,10 +44,28 @@
     <ClCompile Include="Sandbox\src\Editor\EditorLayer.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Entities\Cube.cpp">
+      <Filter>Game\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Entities\Plane.cpp">
+      <Filter>Game\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Entities\Square.cpp">
+      <Filter>Game\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Entities\SquareIndexBuffer.cpp">
+      <Filter>Game\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Entities\SquareTextured.cpp">
+      <Filter>Game\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="Sandbox\src\Game\Entities\Triangle.cpp">
       <Filter>Game\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Sandbox\src\Game\GameLayer.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\MainCamera.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Sandbox\src\Sandbox.cpp" />

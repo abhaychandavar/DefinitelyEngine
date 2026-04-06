@@ -1,6 +1,8 @@
 #pragma once
 #include "DefinitelyEngine/Layer.h"
 
+struct ImGuiContext;
+
 namespace DefinitelyEngine {
     class ImGuiLayer : public Layer {
         public:
@@ -13,5 +15,7 @@ namespace DefinitelyEngine {
 
             void Begin();
             void End();
+
+            static DEFINITELY_ENGINE_API ImGuiContext* GetContext();
     };
 }

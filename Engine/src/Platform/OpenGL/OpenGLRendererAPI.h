@@ -9,6 +9,7 @@ namespace DefinitelyEngine {
         virtual void SetClearColor(float r, float g, float b, float a) override;
         virtual void Clear() override;
         virtual void DrawArrays(PrimitiveType primitive, int count) override;
-    };
+        virtual void DrawIndexed(PrimitiveType primitive, unsigned int count) override;
+};
 
 }

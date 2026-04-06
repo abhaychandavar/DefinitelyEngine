@@ -4,14 +4,26 @@
     <Filter Include="DefinitelyEngine">
       <UniqueIdentifier>{E8D025CD-D4C9-441F-FDFB-29A4E953242B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\Camera">
+      <UniqueIdentifier>{6050784F-CC87-C0E6-D591-240A4148E7DF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DefinitelyEngine\Events">
       <UniqueIdentifier>{CC679A55-389F-E2EC-41A9-4610AD5F09E6}</UniqueIdentifier>
     </Filter>
     <Filter Include="DefinitelyEngine\ImGui">
       <UniqueIdentifier>{125411DC-FE4D-3A2E-E7BA-D03ED353A09A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\Model">
+      <UniqueIdentifier>{28485BDC-1442-842E-FDAE-1A3FE947EA9A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DefinitelyEngine\Renderer">
       <UniqueIdentifier>{8E99CE1C-FA5B-02A7-430C-9133AF0DDB84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitelyEngine\Scene">
+      <UniqueIdentifier>{054CC1DC-F145-EA2E-DAB2-803FC64B509B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitelyEngine\Texture">
+      <UniqueIdentifier>{485E4465-3483-93E5-5DCE-787549529203}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
@@ -30,6 +42,15 @@
     <ClInclude Include="Engine\src\DefinitelyEngine.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Application.h">
       <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Camera\Camera.h">
+      <Filter>DefinitelyEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Camera\OrthographicCamera.h">
+      <Filter>DefinitelyEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.h">
+      <Filter>DefinitelyEngine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Core.h">
       <Filter>DefinitelyEngine</Filter>
@@ -70,10 +91,19 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Model\Model.h">
+      <Filter>DefinitelyEngine\Model</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\GraphicsContext.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\Mesh.h">
       <Filter>DefinitelyEngine\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\RenderCommand.h">
@@ -85,8 +115,23 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\Shader.h">
       <Filter>DefinitelyEngine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\VertexArray.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\VertexBuffer.h">
       <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\VertexBufferLayout.h">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Scene\GameObject.h">
+      <Filter>DefinitelyEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Scene\Transform.h">
+      <Filter>DefinitelyEngine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Texture\Texture.h">
+      <Filter>DefinitelyEngine\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h">
       <Filter>DefinitelyEngine</Filter>
@@ -97,10 +142,22 @@
     <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLContext.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLDebug.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLIndexBufferApi.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLRendererAPI.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLVertexBufferApi.h">
@@ -118,6 +175,15 @@
     <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp">
       <Filter>DefinitelyEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Camera\Camera.cpp">
+      <Filter>DefinitelyEngine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Camera\OrthographicCamera.cpp">
+      <Filter>DefinitelyEngine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.cpp">
+      <Filter>DefinitelyEngine\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp">
       <Filter>DefinitelyEngine\Events</Filter>
     </ClCompile>
@@ -130,6 +196,15 @@
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp">
       <Filter>DefinitelyEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Model\Model.cpp">
+      <Filter>DefinitelyEngine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\Mesh.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\RenderCommand.cpp">
       <Filter>DefinitelyEngine\Renderer</Filter>
     </ClCompile>
@@ -139,8 +214,17 @@
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\Shader.cpp">
       <Filter>DefinitelyEngine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\VertexArray.cpp">
+      <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\VertexBuffer.cpp">
       <Filter>DefinitelyEngine\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Texture\StbImageImpl.cpp">
+      <Filter>DefinitelyEngine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Texture\Texture.cpp">
+      <Filter>DefinitelyEngine\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp">
       <Filter>Platform\Mac</Filter>
@@ -148,10 +232,19 @@
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLIndexBufferApi.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLVertexBufferApi.cpp">

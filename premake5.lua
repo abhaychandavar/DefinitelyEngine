@@ -22,6 +22,7 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}"
 include "Engine/external/GLFW"
 include "Engine/external/GLAD"
 include "Engine/external/imgui"
+include "Engine/external/Assimp"
 
 project "Engine"
     kind "SharedLib"
@@ -34,6 +35,10 @@ project "Engine"
     pchheader "depch.h"
     pchsource "Engine/src/depch.cpp"
 
+    filter "files:Engine/src/DefinitelyEngine/Texture/StbImageImpl.cpp"
+        enablepch "Off"
+    filter {}
+
     files
     {
         "Engine/src/**.h",
@@ -45,10 +50,11 @@ project "Engine"
         "Engine/src",
         "Engine/external/*/include",
         "Engine/external/imgui",
-        "Engine/external/GLM"
+        "Engine/external/GLM",
+        "Engine/external"
     }
 
-    links { "GLFW", "GLAD", "ImGui" }
+    links { "GLFW", "GLAD", "ImGui", "Assimp" }
 
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS", "DE_BUILD_DLL", "GLFW_INCLUDE_NONE" }
@@ -94,31 +100,35 @@ project "Sandbox"
         "Sandbox/src",
         "Engine/src",
         "Engine/external/*/include",
-        "Engine/external/GLM"
+        "Engine/external/GLM",
+        "Engine/external/imgui"
     }
 
-    links { "Engine" }
+    links { "Engine", "ImGui" }
 
     filter "system:windows"
         defines { "DE_PLATFORM_WINDOWS" }
         buildoptions { "/utf-8" }
         postbuildcommands
         {
-            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders"),
+            ("{COPYDIR} %{prj.location}Sandbox/Assets bin/" .. outputDir .. "/Assets")
         }
 
     filter "system:macosx"
         defines { "DE_PLATFORM_MAC" }
         postbuildcommands
         {
-            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders"),
+            ("{COPYDIR} %{prj.location}Sandbox/Assets bin/" .. outputDir .. "/Assets")
         }
 
     filter "system:linux"
         defines { "DE_PLATFORM_LINUX" }
         postbuildcommands
         {
-            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders")
+            ("{COPYDIR} %{prj.location}Sandbox/src/Game/Shaders bin/" .. outputDir .. "/Shaders"),
+            ("{COPYDIR} %{prj.location}Sandbox/Assets bin/" .. outputDir .. "/Assets")
         }
 
     filter {}

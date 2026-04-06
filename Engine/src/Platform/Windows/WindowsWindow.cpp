@@ -45,6 +45,9 @@ namespace DefinitelyEngine
             s_GLFWInitialized = true;
         }
 
+#ifdef DE_DEBUG
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
         m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
         DE_CORE_ASSERT(m_Window, "Window initialization failed");

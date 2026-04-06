@@ -1,21 +1,28 @@
 #pragma once
 
 #include "DefinitelyEngine.h"
-#include "Game/Entities/Triangle.h"
+#include "MainCamera.h"
+#include "Game/Entities/Plane.h"
 
 class GameLayer : public DefinitelyEngine::Layer {
-    public:
-        GameLayer();
-        ~GameLayer();
+public:
+    GameLayer();
+    ~GameLayer();
 
-        void OnUpdate() override;
+    void OnUpdate() override;
+    void OnEvent(DefinitelyEngine::Event& e) override;
+    void OnAttach() override;
+    void OnDetach() override;
 
-        void OnEvent(DefinitelyEngine::Event& e) override;
+    std::vector<DefinitelyEngine::GameObject>& GetObjects() { return m_Objects; }
+    int& GetSelectedIndex() { return m_SelectedIndex; }
 
-        void OnAttach() override;
+private:
+    std::vector<DefinitelyEngine::GameObject> m_Objects;
+    int m_SelectedIndex = -1;
 
-        void OnDetach() override;
+    DefinitelyEngine::Model* m_SuzanneModel = nullptr;
+    Plane* m_Plane = nullptr;
 
-    private:
-        Triangle m_Triangle;
+    MainCamera m_Camera;
 };

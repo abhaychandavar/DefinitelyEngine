@@ -8,7 +8,7 @@ namespace DefinitelyEngine {
     }
 
     OpenGLVertexBufferAPI::~OpenGLVertexBufferAPI() {
-        
+        glDeleteBuffers(1, &m_BufferID);
     }
 
     void OpenGLVertexBufferAPI::Bind() const {
@@ -16,15 +16,11 @@ namespace DefinitelyEngine {
     }
 
     void OpenGLVertexBufferAPI::Unbind() const {
-
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void OpenGLVertexBufferAPI::SetData(std::vector<float>* vertices, int size, DefinitelyEngine::BufferUsage bufferUsage) const {
+        glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
         glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), vertices->data(), this->BufferUsageToGLBufferUsage(bufferUsage));
-    }
-
-    void OpenGLVertexBufferAPI::SetLayout(int numOfComponents) const {
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, numOfComponents, GL_FLOAT, GL_FALSE, sizeof(float) * numOfComponents, 0);
     }
 }

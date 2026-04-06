@@ -23,7 +23,6 @@ namespace DefinitelyEngine {
                 }
             }
 
-            virtual void OpenGLVertexBufferAPI::SetLayout(int numOfComponents) const override;
         
         private:
             unsigned int m_BufferID;

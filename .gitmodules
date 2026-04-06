@@ -10,3 +10,6 @@
 [submodule "Engine/external/GLM"]
 	path = Engine/external/GLM
 	url = https://github.com/g-truc/glm.git
+[submodule "Engine/external/ASSIMP"]
+	path = Engine/external/ASSIMP
+	url = git@github.com:abhaychandavar/assimp.git

@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_DEBUG;DE_ENABLE_ASSERTS;DE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\ASSIMP\include;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -72,7 +72,8 @@
     <ProjectReference>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Debug-windows-x86_64\$(ProjectName)\Shaders</Command>
+      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Debug-windows-x86_64\$(ProjectName)\Shaders
+xcopy /Q /E /Y /I $(ProjectDir)Sandbox\Assets bin\Debug-windows-x86_64\$(ProjectName)\Assets</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -80,7 +81,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DE_RELEASE;DE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Sandbox\src;Engine\src;Engine\external\ASSIMP\include;Engine\external\GLAD\include;Engine\external\GLFW\include;Engine\external\spdlog\include;Engine\external\GLM;Engine\external\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -98,23 +99,39 @@
     <ProjectReference>
     </ProjectReference>
     <PostBuildEvent>
-      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Release-windows-x86_64\$(ProjectName)\Shaders</Command>
+      <Command>xcopy /Q /E /Y /I $(ProjectDir)Sandbox\src\Game\Shaders bin\Release-windows-x86_64\$(ProjectName)\Shaders
+xcopy /Q /E /Y /I $(ProjectDir)Sandbox\Assets bin\Release-windows-x86_64\$(ProjectName)\Assets</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Sandbox\src\Editor\EditorLayer.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\Cube.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\Plane.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\Square.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\SquareIndexBuffer.h" />
+    <ClInclude Include="Sandbox\src\Game\Entities\SquareTextured.h" />
     <ClInclude Include="Sandbox\src\Game\Entities\Triangle.h" />
     <ClInclude Include="Sandbox\src\Game\GameLayer.h" />
+    <ClInclude Include="Sandbox\src\Game\MainCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sandbox\src\Editor\EditorLayer.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\Cube.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\Plane.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\Square.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\SquareIndexBuffer.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Entities\SquareTextured.cpp" />
     <ClCompile Include="Sandbox\src\Game\Entities\Triangle.cpp" />
     <ClCompile Include="Sandbox\src\Game\GameLayer.cpp" />
+    <ClCompile Include="Sandbox\src\Game\MainCamera.cpp" />
     <ClCompile Include="Sandbox\src\Sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Engine.vcxproj">
       <Project>{DBC7D3B0-C769-FE86-B024-12DB9C6585D7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Engine\external\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

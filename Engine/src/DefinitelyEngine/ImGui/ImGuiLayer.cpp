@@ -51,6 +51,11 @@ namespace DefinitelyEngine {
         ImGui::ShowDemoWindow(&show);
     }
 
+    ImGuiContext* ImGuiLayer::GetContext()
+    {
+        return ImGui::GetCurrentContext();
+    }
+
     void ImGuiLayer::Begin()
     {
         ImGui_ImplOpenGL3_NewFrame();

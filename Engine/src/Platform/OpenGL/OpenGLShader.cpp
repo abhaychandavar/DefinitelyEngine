@@ -1,6 +1,7 @@
 #include "depch.h"
 #include "OpenGLShader.h"
 #include "DefinitelyEngine/Log.h"
+#include "DefinitelyEngine/Log.h"
 
 #include <glad/glad.h>
 
@@ -52,4 +53,34 @@ namespace DefinitelyEngine {
         return id;
     }
 
+    int OpenGLShader::GetUniformLocation(const std::string& name) const {
+        auto it = m_UniformLocationCache.find(name);
+        if (it != m_UniformLocationCache.end())
+            return it->second;
+
+        int loc = glGetUniformLocation(m_ProgramID, name.c_str());
+        if (loc == -1)
+            DE_CORE_WARN("Uniform '{0}' not found in shader", name);
+
+        m_UniformLocationCache[name] = loc;
+        return loc;
+    }
+
+    void OpenGLShader::SetUniform4f(const std::string& name, std::array<float, 4> values) const {
+        int loc = GetUniformLocation(name);
+        if (loc == -1) return;
+        glUniform4f(loc, values[0], values[1], values[2], values[3]);
+    }
+
+    void OpenGLShader::SetUniform1i(const std::string& name, int value) const {
+        int loc = GetUniformLocation(name);
+        if (loc == -1) return;
+        glUniform1i(loc, value);
+    }
+
+    void OpenGLShader::SetUniformMat4(const std::string& name, const glm::mat4& matrix) const {
+        int loc = GetUniformLocation(name);
+        if (loc == -1) return;
+        glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+    }
 }

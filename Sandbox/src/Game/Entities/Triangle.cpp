@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include "DefinitelyEngine/Renderer/VertexBufferLayout.h"
 
 Triangle::Triangle() {
     std::vector<float> positions = {
@@ -10,7 +11,9 @@ Triangle::Triangle() {
     m_Buffer = DefinitelyEngine::VertexBuffer::Create();
     m_Buffer->Bind();
     m_Buffer->SetData(&positions, 6, DefinitelyEngine::BufferUsage::Static);
-    m_Buffer->SetLayout(2);
+    DefinitelyEngine::VertexBufferLayout layout;
+    layout.Push(DefinitelyEngine::ShaderDataType::Float2, "a_Position");
+    m_Buffer->SetLayout(layout);
 
     
 
