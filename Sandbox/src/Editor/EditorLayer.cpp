@@ -29,6 +29,20 @@ void EditorLayer::OnImGuiRender() {
         ImGui::DragFloat3("Position", glm::value_ptr(obj.transform.position), 0.1f);
         ImGui::DragFloat3("Rotation", glm::value_ptr(obj.transform.rotation), 1.0f);
         ImGui::DragFloat("Scale",    &obj.transform.scale, 0.01f, 0.001f, 100.0f);
+
+        if (obj.collider) {
+            ImGui::Separator();
+            ImGui::Text("Collider");
+            ImGui::DragFloat3("Col Offset", glm::value_ptr(obj.collider->localOffset), 0.01f);
+            if (obj.collider->GetType() == DefinitelyEngine::ColliderType::Box) {
+                auto* b = static_cast<DefinitelyEngine::BoxCollider*>(obj.collider);
+                ImGui::DragFloat3("Half Extents", glm::value_ptr(b->halfExtents), 0.01f, 0.001f, 50.0f);
+            } else if (obj.collider->GetType() == DefinitelyEngine::ColliderType::Capsule) {
+                auto* c = static_cast<DefinitelyEngine::CapsuleCollider*>(obj.collider);
+                ImGui::DragFloat("Radius", &c->radius, 0.01f, 0.01f, 10.0f);
+                ImGui::DragFloat("Height", &c->height, 0.01f, 0.01f, 10.0f);
+            }
+        }
     }
     ImGui::End();
 }

@@ -20,6 +20,7 @@ namespace DefinitelyEngine {
         virtual void Bind()   const = 0;
         virtual void Unbind() const = 0;
         virtual void SetData(std::vector<float>* verticies, int size, BufferUsage bufferUsage) const = 0;
+        virtual void SetData(const void* data, uint32_t sizeBytes, BufferUsage bufferUsage) const = 0;
 
         void SetLayout(const VertexBufferLayout& layout) { m_Layout = layout; }
         const VertexBufferLayout& GetLayout() const      { return m_Layout; }

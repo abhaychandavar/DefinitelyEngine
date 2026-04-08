@@ -134,5 +134,10 @@ namespace DefinitelyEngine
     bool WindowsWindow::IsVsync() const {
         return m_Data.Vsync;
     }
+
+    void WindowsWindow::SetCursorLocked(bool locked) {
+        glfwSetInputMode(m_Window, GLFW_CURSOR,
+            locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
 } // namespace DefinitelyEngine
 #endif // DE_PLATFORM_WINDOWS

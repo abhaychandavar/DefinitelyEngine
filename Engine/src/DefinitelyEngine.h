@@ -28,5 +28,18 @@
 #include "DefinitelyEngine/Renderer/Mesh.h"
 #include "DefinitelyEngine/Model/Model.h"
 
+#include "DefinitelyEngine/Animation/Bone.h"
+#include "DefinitelyEngine/Animation/Skeleton.h"
+#include "DefinitelyEngine/Animation/AnimationClip.h"
+#include "DefinitelyEngine/Animation/AnimatedMesh.h"
+#include "DefinitelyEngine/Animation/Animator.h"
+#include "DefinitelyEngine/Animation/AnimatedModel.h"
+
 #include "DefinitelyEngine/Scene/Transform.h"
 #include "DefinitelyEngine/Scene/GameObject.h"
+#include "DefinitelyEngine/Tick.h"
+
+#include "DefinitelyEngine/Physics/Collider.h"
+#include "DefinitelyEngine/Physics/Ray.h"
+#include "DefinitelyEngine/Physics/CollisionWorld.h"
+#include "DefinitelyEngine/Debug/DebugDraw.h"

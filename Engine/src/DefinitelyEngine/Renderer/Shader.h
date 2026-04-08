@@ -18,6 +18,7 @@ namespace DefinitelyEngine {
         virtual void SetUniform4f(const std::string& name, std::array<float, 4> values) const = 0;
         virtual void SetUniform1i(const std::string& name, int value) const = 0;
         virtual void SetUniformMat4(const std::string& name, const glm::mat4& matrix) const = 0;
+        virtual void SetUniformMat4Array(const std::string& name, const std::vector<glm::mat4>& matrices) const = 0;
     };
 
 }

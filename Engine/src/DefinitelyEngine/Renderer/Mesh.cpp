@@ -38,7 +38,7 @@ namespace DefinitelyEngine {
         m_VertexArray->AddVertexBuffer(vb);
         m_VertexArray->SetIndexBuffer(ib);
 
-        vb->SetData(&flatData, (int)(flatData.size() * sizeof(float)), BufferUsage::Static);
+        vb->SetData(&flatData, (int)flatData.size(), BufferUsage::Static);
         ib->SetData(const_cast<unsigned int*>(reinterpret_cast<const unsigned int*>(indices.data())),
                     (unsigned int)indices.size());
     }

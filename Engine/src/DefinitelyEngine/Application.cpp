@@ -8,7 +8,6 @@
 #include "ImGui/ImGuiLayer.h"
 #include "Input.h"
 #include "Renderer/RenderCommand.h"
-
 namespace DefinitelyEngine {
 
     Application* Application::s_Instance = nullptr;
@@ -106,11 +105,14 @@ namespace DefinitelyEngine {
     void Application::Run() {
         this->Running = true;
         while(this->Running) {
+            m_Tick.Update();
+            const float dt = m_Tick.DeltaTime();
+
             RenderCommand::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             RenderCommand::Clear();
 
             for (Layer* layer : m_LayerStack)
-                layer->OnUpdate();
+                layer->OnUpdate(dt);
 
             m_ImGuiLayer->Begin();
             for (Layer* layer : m_LayerStack)

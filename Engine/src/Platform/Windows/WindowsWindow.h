@@ -18,6 +18,8 @@ namespace DefinitelyEngine {
             void SetVSync(bool enabled) override;
             bool IsVsync() const;
 
+            void SetCursorLocked(bool locked) override;
+
             inline void* GetNativeWindow() const override { return m_Window; }
 
             void SetEventCallback(std::function<void(Event&)> func) override { this->m_Data.EventCallback = func; };

@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
+#include "Tick.h"
 
 namespace DefinitelyEngine
 {
@@ -25,6 +26,7 @@ namespace DefinitelyEngine
       std::unique_ptr<Window> m_Window;
       LayerStack m_LayerStack;
       ImGuiLayer* m_ImGuiLayer;
+      Tick m_Tick;
       bool Running;
 
       void OnEvent(Event& e);

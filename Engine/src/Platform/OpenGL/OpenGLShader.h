@@ -16,6 +16,7 @@ namespace DefinitelyEngine {
         virtual void SetUniform4f(const std::string& name, std::array<float, 4> values) const override;
         virtual void SetUniform1i(const std::string& name, int value) const override;
         virtual void SetUniformMat4(const std::string& name, const glm::mat4& matrix) const override;
+        virtual void SetUniformMat4Array(const std::string& name, const std::vector<glm::mat4>& matrices) const override;
 
     private:
         unsigned int CompileShader(unsigned int type, const std::string& source);

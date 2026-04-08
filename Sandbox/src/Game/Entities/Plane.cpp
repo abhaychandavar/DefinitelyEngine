@@ -27,7 +27,7 @@ Plane::Plane() {
     m_VertexArray->AddVertexBuffer(vertexBuffer);
     m_VertexArray->SetIndexBuffer(indexBuffer);
 
-    vertexBuffer->SetData(&positions, positions.size() * sizeof(float), DefinitelyEngine::BufferUsage::Static);
+    vertexBuffer->SetData(&positions, (int)positions.size(), DefinitelyEngine::BufferUsage::Static);
     indexBuffer->SetData(indices, 6);
 
     m_shader = DefinitelyEngine::Shader::CreateFromFile("Shaders/Basic.shader");

@@ -29,14 +29,24 @@ namespace DefinitelyEngine {
         uint32_t index = 0;
         for (const auto& element : layout) {
             glEnableVertexAttribArray(index);
-            glVertexAttribPointer(
-                index,
-                element.GetComponentCount(),
-                GL_FLOAT,
-                element.Normalized ? GL_TRUE : GL_FALSE,
-                layout.GetStride(),
-                (const void*)(uintptr_t)element.Offset
-            );
+            if (ShaderDataTypeIsInteger(element.Type)) {
+                glVertexAttribIPointer(
+                    index,
+                    element.GetComponentCount(),
+                    GL_INT,
+                    layout.GetStride(),
+                    (const void*)(uintptr_t)element.Offset
+                );
+            } else {
+                glVertexAttribPointer(
+                    index,
+                    element.GetComponentCount(),
+                    GL_FLOAT,
+                    element.Normalized ? GL_TRUE : GL_FALSE,
+                    layout.GetStride(),
+                    (const void*)(uintptr_t)element.Offset
+                );
+            }
             index++;
         }
 

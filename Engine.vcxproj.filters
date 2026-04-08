@@ -4,8 +4,14 @@
     <Filter Include="DefinitelyEngine">
       <UniqueIdentifier>{E8D025CD-D4C9-441F-FDFB-29A4E953242B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\Animation">
+      <UniqueIdentifier>{D7CB82DC-C3DB-2EAD-2C95-93CB18C41D46}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DefinitelyEngine\Camera">
       <UniqueIdentifier>{6050784F-CC87-C0E6-D591-240A4148E7DF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitelyEngine\Debug">
+      <UniqueIdentifier>{5EE9B2DB-4AE3-DB2D-3350-723E1FE9419A}</UniqueIdentifier>
     </Filter>
     <Filter Include="DefinitelyEngine\Events">
       <UniqueIdentifier>{CC679A55-389F-E2EC-41A9-4610AD5F09E6}</UniqueIdentifier>
@@ -15,6 +21,9 @@
     </Filter>
     <Filter Include="DefinitelyEngine\Model">
       <UniqueIdentifier>{28485BDC-1442-842E-FDAE-1A3FE947EA9A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DefinitelyEngine\Physics">
+      <UniqueIdentifier>{5A3C6C38-4661-BBB8-6FAC-A0485B30BAD6}</UniqueIdentifier>
     </Filter>
     <Filter Include="DefinitelyEngine\Renderer">
       <UniqueIdentifier>{8E99CE1C-FA5B-02A7-430C-9133AF0DDB84}</UniqueIdentifier>
@@ -40,6 +49,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\src\DefinitelyEngine.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimatedMesh.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimatedModel.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimationClip.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Animator.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Bone.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Skeleton.h">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Application.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
@@ -54,6 +81,9 @@
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Core.h">
       <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Debug\DebugDraw.h">
+      <Filter>DefinitelyEngine\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h">
       <Filter>DefinitelyEngine</Filter>
@@ -97,6 +127,15 @@
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h">
       <Filter>DefinitelyEngine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Collider.h">
+      <Filter>DefinitelyEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.h">
+      <Filter>DefinitelyEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Ray.h">
+      <Filter>DefinitelyEngine\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\GraphicsContext.h">
       <Filter>DefinitelyEngine\Renderer</Filter>
     </ClInclude>
@@ -132,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Texture\Texture.h">
       <Filter>DefinitelyEngine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Tick.h">
+      <Filter>DefinitelyEngine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h">
       <Filter>DefinitelyEngine</Filter>
@@ -172,6 +214,15 @@
     <ClInclude Include="Engine\src\depch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\AnimatedMesh.cpp">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\AnimatedModel.cpp">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\Animator.cpp">
+      <Filter>DefinitelyEngine\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp">
       <Filter>DefinitelyEngine</Filter>
     </ClCompile>
@@ -183,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.cpp">
       <Filter>DefinitelyEngine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Debug\DebugDraw.cpp">
+      <Filter>DefinitelyEngine\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp">
       <Filter>DefinitelyEngine\Events</Filter>
@@ -198,6 +252,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Model\Model.cpp">
       <Filter>DefinitelyEngine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.cpp">
+      <Filter>DefinitelyEngine\Physics</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.cpp">
       <Filter>DefinitelyEngine\Renderer</Filter>
@@ -225,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Texture\Texture.cpp">
       <Filter>DefinitelyEngine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Tick.cpp">
+      <Filter>DefinitelyEngine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp">
       <Filter>Platform\Mac</Filter>

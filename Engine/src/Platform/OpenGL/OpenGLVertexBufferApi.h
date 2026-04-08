@@ -13,6 +13,7 @@ namespace DefinitelyEngine {
             virtual void Bind() const override;
             virtual void Unbind() const override;
             virtual void SetData(std::vector<float>* verticies, int size, DefinitelyEngine::BufferUsage bufferUsage) const override;
+            virtual void SetData(const void* data, uint32_t sizeBytes, DefinitelyEngine::BufferUsage bufferUsage) const override;
             
             inline static GLenum BufferUsageToGLBufferUsage(BufferUsage bufferUsage) {
                 switch (bufferUsage) {

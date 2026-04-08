@@ -23,4 +23,9 @@ namespace DefinitelyEngine {
         glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
         glBufferData(GL_ARRAY_BUFFER, size * sizeof(float), vertices->data(), this->BufferUsageToGLBufferUsage(bufferUsage));
     }
+
+    void OpenGLVertexBufferAPI::SetData(const void* data, uint32_t sizeBytes, DefinitelyEngine::BufferUsage bufferUsage) const {
+        glBindBuffer(GL_ARRAY_BUFFER, m_BufferID);
+        glBufferData(GL_ARRAY_BUFFER, sizeBytes, data, this->BufferUsageToGLBufferUsage(bufferUsage));
+    }
 }

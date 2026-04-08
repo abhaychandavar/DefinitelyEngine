@@ -83,4 +83,11 @@ namespace DefinitelyEngine {
         if (loc == -1) return;
         glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
     }
+
+    void OpenGLShader::SetUniformMat4Array(const std::string& name, const std::vector<glm::mat4>& matrices) const {
+        if (matrices.empty()) return;
+        int loc = GetUniformLocation(name);
+        if (loc == -1) return;
+        glUniformMatrix4fv(loc, (GLsizei)matrices.size(), GL_FALSE, glm::value_ptr(matrices[0]));
+    }
 }

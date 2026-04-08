@@ -7,7 +7,8 @@ namespace DefinitelyEngine {
 
     enum class ShaderDataType {
         None = 0,
-        Float, Float2, Float3, Float4
+        Float, Float2, Float3, Float4,
+        Int4   // integer vec4 — used for bone IDs
     };
 
     static uint32_t ShaderDataTypeSize(ShaderDataType type) {
@@ -16,8 +17,13 @@ namespace DefinitelyEngine {
             case ShaderDataType::Float2: return 8;
             case ShaderDataType::Float3: return 12;
             case ShaderDataType::Float4: return 16;
+            case ShaderDataType::Int4:   return 16;
             default: return 0;
         }
+    }
+
+    static bool ShaderDataTypeIsInteger(ShaderDataType type) {
+        return type == ShaderDataType::Int4;
     }
 
     struct DEFINITELY_ENGINE_API BufferElement {
@@ -36,6 +42,7 @@ namespace DefinitelyEngine {
                 case ShaderDataType::Float2: return 2;
                 case ShaderDataType::Float3: return 3;
                 case ShaderDataType::Float4: return 4;
+                case ShaderDataType::Int4:   return 4;
                 default: return 0;
             }
         }

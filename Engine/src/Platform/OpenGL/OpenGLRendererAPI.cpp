@@ -9,7 +9,7 @@ namespace {
     GLenum ToGLPrimitive(DefinitelyEngine::RendererAPI::PrimitiveType type) {
         switch (type) {
             case DefinitelyEngine::RendererAPI::PrimitiveType::Triangles: return GL_TRIANGLES;
-            case DefinitelyEngine::RendererAPI::PrimitiveType::Lines:     return GL_LINE_STRIP;
+            case DefinitelyEngine::RendererAPI::PrimitiveType::Lines:     return GL_LINES;
             case DefinitelyEngine::RendererAPI::PrimitiveType::Points:    return GL_POINTS;
         }
         return GL_TRIANGLES;

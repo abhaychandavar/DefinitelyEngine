@@ -30,6 +30,8 @@ namespace DefinitelyEngine {
             virtual void SetVSync(bool enabled) = 0;
             virtual bool IsVsync() const = 0;
 
+            virtual void SetCursorLocked(bool locked) = 0;
+
             virtual void* GetNativeWindow() const = 0;
 
             static Window* Create(const WindowProps& props = WindowProps());

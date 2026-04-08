@@ -109,11 +109,18 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Engine\src\DefinitelyEngine.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimatedMesh.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimatedModel.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\AnimationClip.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Animator.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Bone.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Animation\Skeleton.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Application.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Camera\Camera.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Camera\OrthographicCamera.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Core.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Debug\DebugDraw.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Entry.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\Event.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\KeyEvent.h" />
@@ -128,6 +135,9 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Model\Model.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Collider.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Ray.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\GraphicsContext.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Renderer\Mesh.h" />
@@ -140,6 +150,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Scene\GameObject.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Scene\Transform.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Texture\Texture.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Tick.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Window.h" />
     <ClInclude Include="Engine\src\Platform\Mac\MacWindow.h" />
     <ClInclude Include="Engine\src\Platform\OpenGL\OpenGLContext.h" />
@@ -155,15 +166,20 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\depch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\AnimatedMesh.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\AnimatedModel.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Animation\Animator.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Application.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Camera\Camera.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Debug\DebugDraw.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Model\Model.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\Mesh.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\RenderCommand.cpp" />
@@ -175,6 +191,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Texture\Texture.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Tick.cpp" />
     <ClCompile Include="Engine\src\Platform\Mac\MacWindow.cpp" />
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="Engine\src\Platform\OpenGL\OpenGLIndexBufferApi.cpp" />
