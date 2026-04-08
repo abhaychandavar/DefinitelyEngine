@@ -1,5 +1,9 @@
 #include "GameLayer.h"
 #include "DefinitelyEngine/Input.h"
+#include "DefinitelyEngine/Events/WindowResizeEvent.h"
+
+#include <string>
+
 namespace {
     constexpr const char* kZombieRightHandBoneName = "CC_Base_R_Hand";
     constexpr float kAssumedFrameRate = 60.0f;
@@ -132,7 +136,7 @@ GameLayer::GameLayer()
         DefinitelyEngine::GameObject obj;
         obj.name = "Plane";
         obj.transform.position = { 0.0f, 0.0f, 0.0f };
-        obj.transform.scale = 15.0f;
+        obj.transform.scale = 45.0f;
         obj.onRender = [this](const glm::mat4& vp, const glm::mat4& t) {
             m_Plane->Render(vp, t);
         };
@@ -147,7 +151,7 @@ GameLayer::GameLayer()
     m_PlaneCollider = new DefinitelyEngine::BoxCollider();
     m_PlaneCollider->ownerName   = "Plane";
     m_PlaneCollider->tag         = "Ground";
-    m_PlaneCollider->halfExtents = { 7.5f, 0.05f, 7.5f };  // matches visual scale 15
+    m_PlaneCollider->halfExtents = { 22.5f, 0.05f, 22.5f };  // matches visual scale 45
     m_Objects[3].collider = m_PlaneCollider;
     m_CollisionWorld.Register(m_PlaneCollider);
 
@@ -309,23 +313,43 @@ void GameLayer::OnUpdate(float dt) {
         if (xzDist > 0.01f)
             m_Objects[0].transform.rotation.y = glm::degrees(glm::atan(dx, dz));
 
+        const bool inAttackRange = xzDist < kZombieAttackRange;
+
         if (m_ZombieState == ZombieState::Attacking) {
-            // Wait for the attack clip to finish, then cool down and return to follow
-            m_ZombieAttackTimeLeft -= dt;
-            if (m_ZombieAttackTimeLeft <= 0.0f) {
-                m_ZombieState      = ZombieState::Follow;
-                m_ZombieAttackCooldown = kZombieAttackCooldownDuration;
+            if (!inAttackRange) {
+                m_ZombieState = ZombieState::Follow;
+                m_ZombieAttackTimeLeft = 0.0f;
+                m_ZombieAttackCooldown = 0.0f;
                 m_ZombieHandHitLoggedThisAttack = false;
                 if (m_ZombieRunClip) m_ZombieAnimator->SetClip(m_ZombieRunClip);
+            } else if (m_ZombieAttackTimeLeft > 0.0f) {
+                m_ZombieAttackTimeLeft -= dt;
+                if (m_ZombieAttackTimeLeft <= 0.0f) {
+                    m_ZombieAttackTimeLeft = 0.0f;
+                    m_ZombieAttackCooldown = kZombieAttackCooldownDuration;
+                    m_ZombieHandHitLoggedThisAttack = false;
+                }
+            } else {
+                if (m_ZombieAttackCooldown > 0.0f)
+                    m_ZombieAttackCooldown -= dt;
+
+                if (m_ZombieAttackCooldown <= 0.0f && m_ZombieAttackClip) {
+                    m_ZombieAttackCooldown = 0.0f;
+                    m_ZombieAttackTimeLeft = m_ZombieAttackDuration;
+                    m_ZombieHandHitLoggedThisAttack = false;
+                    m_ZombieAnimator->SetClip(m_ZombieAttackClip, false);
+                    DE_TRACE("Zombie attacks! distance={0:.2f}", xzDist);
+                }
             }
         } else {
             if (m_ZombieAttackCooldown > 0.0f)
                 m_ZombieAttackCooldown -= dt;
 
-            if (xzDist < kZombieAttackRange && m_ZombieAttackCooldown <= 0.0f && m_ZombieAttackClip) {
+            if (inAttackRange && m_ZombieAttackCooldown <= 0.0f && m_ZombieAttackClip) {
                 // Start attack
                 m_ZombieState          = ZombieState::Attacking;
                 m_ZombieAttackTimeLeft = m_ZombieAttackDuration;
+                m_ZombieAttackCooldown = 0.0f;
                 m_ZombieHandHitLoggedThisAttack = false;
                 m_ZombieAnimator->SetClip(m_ZombieAttackClip, false);
                 DE_TRACE("Zombie attacks! distance={0:.2f}", xzDist);
@@ -376,6 +400,7 @@ void GameLayer::OnUpdate(float dt) {
             && isPastAttackHitLogStart
             && !m_ZombieHandHitLoggedThisAttack) {
             DE_TRACE("Zombie hand trigger intersected player");
+            m_PlayerHealth = glm::max(0.0f, m_PlayerHealth - 10.0f);
             m_ZombieHandHitLoggedThisAttack = true;
         }
 
@@ -431,8 +456,51 @@ void GameLayer::OnUpdate(float dt) {
         }
         m_DebugDraw->Flush(vp);
     }
+
+    auto& window = DefinitelyEngine::Application::Get().GetWindow();
+    m_HudRenderer.BeginFrame((float)window.GetWidth(), (float)window.GetHeight());
+
+    m_HudRenderer.DrawQuad(
+        { -4.0f, -4.0f, 8.0f, 8.0f },
+        { 1.0f, 1.0f, 1.0f, 0.95f },
+        DefinitelyEngine::HudAnchor::Center);
+
+    constexpr DefinitelyEngine::HudRect healthBarRect = { 24.0f, 56.0f, 240.0f, 24.0f };
+    m_HudRenderer.DrawQuad(
+        { 20.0f, 52.0f, 248.0f, 32.0f },
+        { 0.0f, 0.0f, 0.0f, 0.35f },
+        DefinitelyEngine::HudAnchor::BottomLeft);
+
+    m_HudRenderer.DrawHealthBar(
+        healthBarRect,
+        m_PlayerMaxHealth > 0.0f ? (m_PlayerHealth / m_PlayerMaxHealth) : 0.0f,
+        { 0.08f, 0.08f, 0.08f, 0.9f },
+        { 0.85f, 0.12f, 0.12f, 1.0f },
+        DefinitelyEngine::HudAnchor::BottomLeft);
+
+    const std::string healthText =
+        "HP " + std::to_string((int)m_PlayerHealth) + "/" + std::to_string((int)m_PlayerMaxHealth);
+    const DefinitelyEngine::HudTextStyle healthTextStyle = {
+        2.0f,
+        { 1.0f, 1.0f, 1.0f, 1.0f }
+    };
+    m_HudRenderer.DrawText(
+        healthText,
+        { 30.0f, 24.0f },
+        healthTextStyle,
+        DefinitelyEngine::HudAnchor::BottomLeft);
+
+    m_HudRenderer.EndFrame();
 }
 
 void GameLayer::OnAttach() {}
 void GameLayer::OnDetach() {}
-void GameLayer::OnEvent(DefinitelyEngine::Event& e) {}
+void GameLayer::OnEvent(DefinitelyEngine::Event& e) {
+    if (e.GetType() == DefinitelyEngine::EventType::WindowResize) {
+        auto& resizeEvent = static_cast<DefinitelyEngine::WindowResizeEvent&>(e);
+        if (resizeEvent.GetHeight() > 0) {
+            m_Camera.GetCamera().SetAspectRatio(
+                (float)resizeEvent.GetWidth() / (float)resizeEvent.GetHeight());
+        }
+    }
+}

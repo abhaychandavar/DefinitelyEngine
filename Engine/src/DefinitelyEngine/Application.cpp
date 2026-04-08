@@ -60,6 +60,7 @@ namespace DefinitelyEngine {
         m_Window->SetEventCallback([this](Event& e){
             OnEvent(e); });
         RenderCommand::Init();
+        RenderCommand::SetViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
         PushLayer(new ApplicationLayer());
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
@@ -83,11 +84,13 @@ namespace DefinitelyEngine {
         if (e.IsInCategory(EventCategory::Window)) {
             if (e.GetType() == EventType::WindowClose) {
                 OnClose();
+                e.Handled = true;
+                return;
             } else if (e.GetType() == EventType::WindowResize) {
                 auto& re = static_cast<WindowResizeEvent&>(e);
                 DE_CORE_INFO("WindowResize: {}x{}", re.GetWidth(), re.GetHeight());
+                RenderCommand::SetViewport(0, 0, re.GetWidth(), re.GetHeight());
             }
-            return;
         }
 
         // All other events traverse the layer stack back-to-front (overlays first)

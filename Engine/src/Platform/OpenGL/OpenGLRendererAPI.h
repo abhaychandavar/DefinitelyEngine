@@ -10,6 +10,8 @@ namespace DefinitelyEngine {
         virtual void Clear() override;
         virtual void DrawArrays(PrimitiveType primitive, int count) override;
         virtual void DrawIndexed(PrimitiveType primitive, unsigned int count) override;
-};
+        virtual void SetDepthTestEnabled(bool enabled) override;
+        virtual void SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) override;
+    };
 
 }

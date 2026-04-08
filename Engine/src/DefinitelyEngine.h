@@ -43,3 +43,6 @@
 #include "DefinitelyEngine/Physics/Ray.h"
 #include "DefinitelyEngine/Physics/CollisionWorld.h"
 #include "DefinitelyEngine/Debug/DebugDraw.h"
+
+#include "DefinitelyEngine/HUD/HudTypes.h"
+#include "DefinitelyEngine/HUD/HudRenderer.h"

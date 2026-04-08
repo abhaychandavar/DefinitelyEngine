@@ -44,4 +44,16 @@ namespace DefinitelyEngine {
         glDrawElements(ToGLPrimitive(primitive), count, GL_UNSIGNED_INT, nullptr);
     }
 
+    void OpenGLRendererAPI::SetDepthTestEnabled(bool enabled) {
+        if (enabled) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
+    }
+
+    void OpenGLRendererAPI::SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
+        glViewport((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
+    }
+
 }

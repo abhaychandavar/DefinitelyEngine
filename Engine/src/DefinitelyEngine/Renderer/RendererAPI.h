@@ -20,6 +20,8 @@ namespace DefinitelyEngine {
         virtual void Clear() = 0;
         virtual void DrawArrays(PrimitiveType primitive, int count) = 0;
         virtual void DrawIndexed(PrimitiveType primitive, unsigned int count) = 0;
+        virtual void SetDepthTestEnabled(bool enabled) = 0;
+        virtual void SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) = 0;
 
         inline static API GetAPI() { return s_API; }
         static RendererAPI* Create();

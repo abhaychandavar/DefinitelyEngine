@@ -38,8 +38,8 @@ private:
     float       m_ZombieAttackHitLogStartTime = 0.0f;
 
     static constexpr float kZombieSpeed                  = 1.5f;
-    static constexpr float kZombieAttackRange            = 1.5f;
-    static constexpr float kZombieAttackCooldownDuration = 2.0f;
+    static constexpr float kZombieAttackRange            = 0.8f;
+    static constexpr float kZombieAttackCooldownDuration = 0.3f;
 
     DefinitelyEngine::AnimatedModel* m_LeftArmModel     = nullptr;
     DefinitelyEngine::Animator*      m_LeftArmAnimator  = nullptr;
@@ -80,4 +80,8 @@ private:
     bool                               m_ShowColliders   = true;
 
     MainCamera m_Camera;
+    DefinitelyEngine::HudRenderer m_HudRenderer;
+
+    float m_PlayerHealth    = 100.0f;
+    float m_PlayerMaxHealth = 100.0f;
 };

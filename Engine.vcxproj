@@ -127,6 +127,8 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\MouseEvent.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowClose.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowResizeEvent.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\HUD\HudRenderer.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\HUD\HudTypes.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Input.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\KeyCodes.h" />
@@ -175,6 +177,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClCompile Include="Engine\src\DefinitelyEngine\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Debug\DebugDraw.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\HUD\HudRenderer.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />

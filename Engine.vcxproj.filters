@@ -16,6 +16,9 @@
     <Filter Include="DefinitelyEngine\Events">
       <UniqueIdentifier>{CC679A55-389F-E2EC-41A9-4610AD5F09E6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\HUD">
+      <UniqueIdentifier>{38080F9C-2497-9865-CDB5-AC60B923A90B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DefinitelyEngine\ImGui">
       <UniqueIdentifier>{125411DC-FE4D-3A2E-E7BA-D03ED353A09A}</UniqueIdentifier>
     </Filter>
@@ -102,6 +105,12 @@
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Events\WindowResizeEvent.h">
       <Filter>DefinitelyEngine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\HUD\HudRenderer.h">
+      <Filter>DefinitelyEngine\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\HUD\HudTypes.h">
+      <Filter>DefinitelyEngine\HUD</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.h">
       <Filter>DefinitelyEngine\ImGui</Filter>
@@ -240,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Events\MouseEvent.cpp">
       <Filter>DefinitelyEngine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\HUD\HudRenderer.cpp">
+      <Filter>DefinitelyEngine\HUD</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\ImGui\ImGuiLayer.cpp">
       <Filter>DefinitelyEngine\ImGui</Filter>
