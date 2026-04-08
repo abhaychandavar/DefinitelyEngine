@@ -13,8 +13,9 @@ namespace DefinitelyEngine {
 
         std::string ownerName;
         glm::vec3   localOffset  = { 0.0f, 0.0f, 0.0f };  // added to transform.position (world-aligned)
-        std::string tag;                                    // e.g. "Ground", "Enemy" — used to identify hits
+        std::string tag;                                    // e.g. "Ground", "Enemy" - used to identify hits
         glm::vec3   worldCenter  = { 0.0f, 0.0f, 0.0f };  // updated by GameLayer each frame before Update()
+        bool        isTrigger    = false;
     };
 
     // Axis-aligned box defined by half-extents in world-space metres.

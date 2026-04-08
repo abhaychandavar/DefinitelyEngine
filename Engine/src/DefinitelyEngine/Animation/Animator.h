@@ -27,6 +27,7 @@ namespace DefinitelyEngine {
         void Update(float dt);
 
         const std::vector<glm::mat4>& GetBoneMatrices() const { return m_BoneMatrices; }
+        bool TryGetNodeGlobalTransform(const std::string& nodeName, glm::mat4& outTransform) const;
 
     private:
         const Skeleton*        m_Skeleton    = nullptr;
@@ -34,6 +35,7 @@ namespace DefinitelyEngine {
         float                  m_CurrentTime = 0.0f;   // in ticks
         bool                   m_Loop        = true;
         std::vector<glm::mat4> m_BoneMatrices;
+        std::unordered_map<std::string, glm::mat4> m_NodeGlobalTransforms;
 
         // Recursive hierarchy traversal — fills m_BoneMatrices
         void ComputeBoneTransforms(const BoneNode& node, const glm::mat4& parentTransform);

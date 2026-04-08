@@ -34,6 +34,8 @@ private:
     ZombieState m_ZombieState          = ZombieState::Follow;
     float       m_ZombieAttackTimeLeft = 0.0f;
     float       m_ZombieAttackCooldown = 0.0f;
+    float       m_ZombieAttackDuration = 0.0f;
+    float       m_ZombieAttackHitLogStartTime = 0.0f;
 
     static constexpr float kZombieSpeed                  = 1.5f;
     static constexpr float kZombieAttackRange            = 1.5f;
@@ -66,11 +68,13 @@ private:
 
     float m_ZombieVertVelocity = 0.0f;
     bool  m_ZombieGrounded     = false;
+    bool  m_ZombieHandHitLoggedThisAttack = false;
 
     // Collision
     DefinitelyEngine::CollisionWorld   m_CollisionWorld;
     DefinitelyEngine::BoxCollider*     m_PlaneCollider   = nullptr;
     DefinitelyEngine::CapsuleCollider* m_ZombieCollider  = nullptr;
+    DefinitelyEngine::CapsuleCollider* m_ZombieHandCollider = nullptr;
     DefinitelyEngine::CapsuleCollider* m_PlayerCollider  = nullptr;
     DefinitelyEngine::DebugDraw*       m_DebugDraw       = nullptr;
     bool                               m_ShowColliders   = true;

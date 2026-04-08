@@ -1,10 +1,30 @@
 #include "GameLayer.h"
 #include "DefinitelyEngine/Input.h"
 namespace {
+    constexpr const char* kZombieRightHandBoneName = "CC_Base_R_Hand";
+    constexpr float kAssumedFrameRate = 60.0f;
+    constexpr float kAttackHitLogStartFrame = 30.0f;
+
     float GetClipDurationSeconds(const DefinitelyEngine::AnimationClip* clip) {
         if (!clip || clip->ticksPerSecond <= 0.0f)
             return 0.0f;
         return clip->durationTicks / clip->ticksPerSecond;
+    }
+
+    const DefinitelyEngine::BoneNode* FindBoneNodeByName(const DefinitelyEngine::BoneNode& node, const std::string& boneName) {
+        if (node.name == boneName)
+            return &node;
+
+        for (const auto& child : node.children) {
+            if (const auto* found = FindBoneNodeByName(child, boneName))
+                return found;
+        }
+
+        return nullptr;
+    }
+
+    glm::vec3 ExtractTranslation(const glm::mat4& transform) {
+        return glm::vec3(transform[3]);
     }
 }
 
@@ -21,6 +41,22 @@ GameLayer::GameLayer()
     m_ZombieRunClip    = m_ZombieModel->GetClip("Run");
     m_ZombieAttackClip = m_ZombieModel->GetClip("Attack");
     if (m_ZombieRunClip) m_ZombieAnimator->SetClip(m_ZombieRunClip);
+    m_ZombieAttackDuration = GetClipDurationSeconds(m_ZombieAttackClip);
+    m_ZombieAttackHitLogStartTime = glm::min(m_ZombieAttackDuration, kAttackHitLogStartFrame / kAssumedFrameRate);
+    if (m_ZombieAttackDuration > 0.0f) {
+        DE_TRACE("Zombie attack length: {0:.3f}s, hand-hit log starts at {1:.3f}s (frame {2:.0f} @ {3:.0f} fps)",
+            m_ZombieAttackDuration,
+            m_ZombieAttackHitLogStartTime,
+            kAttackHitLogStartFrame,
+            kAssumedFrameRate);
+    }
+
+    {
+        const DefinitelyEngine::Skeleton& zombieSkeleton = m_ZombieModel->GetSkeleton();
+        if (const auto* rightHandBone = FindBoneNodeByName(zombieSkeleton.rootNode, kZombieRightHandBoneName)) {
+            DE_TRACE("Zombie bone found at startup: {0}", rightHandBone->name);
+        }
+    }
 
     m_LeftArmModel    = new DefinitelyEngine::AnimatedModel("Assets/Models/mcLeftArm.fbx");
     m_LeftArmAnimator = new DefinitelyEngine::Animator(&m_LeftArmModel->GetSkeleton());
@@ -51,6 +87,16 @@ GameLayer::GameLayer()
     m_ZombieCollider->height      = 1.2f;
     m_Objects[0].collider = m_ZombieCollider;
     m_CollisionWorld.Register(m_ZombieCollider);
+
+    m_ZombieHandCollider = new DefinitelyEngine::CapsuleCollider();
+    m_ZombieHandCollider->ownerName = "ZombieRightHandTrigger";
+    m_ZombieHandCollider->tag       = "ZombieHandTrigger";
+    m_ZombieHandCollider->isTrigger = true;
+    m_ZombieHandCollider->radius    = 0.18f;
+    m_ZombieHandCollider->height    = 0.02f;
+    m_CollisionWorld.Register(m_ZombieHandCollider);
+    m_CollisionWorld.IgnoreCollision("ZombieHandTrigger", "Enemy");
+    m_CollisionWorld.IgnoreCollision("ZombieHandTrigger", "Ground");
 
     {
         DefinitelyEngine::GameObject obj;
@@ -134,6 +180,7 @@ GameLayer::~GameLayer() {
     delete m_RightArmModel;
     delete m_PlaneCollider;
     delete m_ZombieCollider;
+    delete m_ZombieHandCollider;
     delete m_PlayerCollider;
     delete m_DebugDraw;
 }
@@ -190,6 +237,17 @@ void GameLayer::OnUpdate(float dt) {
     if (m_RightArmAnimator) m_RightArmAnimator->Update(dt);
 
     m_Camera.OnUpdate(dt);  // XZ movement only (flat front vector, no Y change)
+
+    if (m_ZombieHandCollider && m_ZombieAnimator) {
+        glm::mat4 handBoneTransform(1.0f);
+        if (m_ZombieAnimator->TryGetNodeGlobalTransform(kZombieRightHandBoneName, handBoneTransform)) {
+            const glm::mat4 zombieWorld = m_Objects[0].transform.GetMatrix();
+            const glm::vec3 handWorldPosition = ExtractTranslation(zombieWorld * handBoneTransform);
+            m_ZombieHandCollider->worldCenter = handWorldPosition;
+        } else {
+            m_ZombieHandCollider->worldCenter = m_Objects[0].transform.position;
+        }
+    }
 
     // --- Update worldCenters for all colliders (plane + zombie) ---
     for (auto& obj : m_Objects) {
@@ -257,6 +315,7 @@ void GameLayer::OnUpdate(float dt) {
             if (m_ZombieAttackTimeLeft <= 0.0f) {
                 m_ZombieState      = ZombieState::Follow;
                 m_ZombieAttackCooldown = kZombieAttackCooldownDuration;
+                m_ZombieHandHitLoggedThisAttack = false;
                 if (m_ZombieRunClip) m_ZombieAnimator->SetClip(m_ZombieRunClip);
             }
         } else {
@@ -266,7 +325,8 @@ void GameLayer::OnUpdate(float dt) {
             if (xzDist < kZombieAttackRange && m_ZombieAttackCooldown <= 0.0f && m_ZombieAttackClip) {
                 // Start attack
                 m_ZombieState          = ZombieState::Attacking;
-                m_ZombieAttackTimeLeft = GetClipDurationSeconds(m_ZombieAttackClip);
+                m_ZombieAttackTimeLeft = m_ZombieAttackDuration;
+                m_ZombieHandHitLoggedThisAttack = false;
                 m_ZombieAnimator->SetClip(m_ZombieAttackClip, false);
                 DE_TRACE("Zombie attacks! distance={0:.2f}", xzDist);
             } else if (xzDist > 0.01f) {
@@ -305,6 +365,23 @@ void GameLayer::OnUpdate(float dt) {
 
     // --- Resolve contacts: push overlapping capsules apart ---
     for (const auto& contact : m_CollisionWorld.GetContacts()) {
+        const bool isZombieHandPlayerContact =
+            (contact.a == m_ZombieHandCollider && contact.b == m_PlayerCollider) ||
+            (contact.a == m_PlayerCollider && contact.b == m_ZombieHandCollider);
+        const float zombieAttackElapsedTime = m_ZombieAttackDuration - m_ZombieAttackTimeLeft;
+        const bool isPastAttackHitLogStart =
+            zombieAttackElapsedTime >= m_ZombieAttackHitLogStartTime;
+        if (isZombieHandPlayerContact
+            && m_ZombieState == ZombieState::Attacking
+            && isPastAttackHitLogStart
+            && !m_ZombieHandHitLoggedThisAttack) {
+            DE_TRACE("Zombie hand trigger intersected player");
+            m_ZombieHandHitLoggedThisAttack = true;
+        }
+
+        if (contact.a->isTrigger || contact.b->isTrigger)
+            continue;
+
         glm::vec3 push = contact.normal * (contact.depth * 0.5f);
 
         for (auto& obj : m_Objects) {
@@ -344,6 +421,13 @@ void GameLayer::OnUpdate(float dt) {
                 auto* c = static_cast<DefinitelyEngine::CapsuleCollider*>(obj.collider);
                 m_DebugDraw->DrawCapsule(wPos, c->radius, c->height, { 0.0f, 1.0f, 1.0f, 1.0f });
             }
+        }
+        if (m_ZombieHandCollider) {
+            m_DebugDraw->DrawCapsule(
+                m_ZombieHandCollider->worldCenter,
+                m_ZombieHandCollider->radius,
+                m_ZombieHandCollider->height,
+                { 1.0f, 0.3f, 0.3f, 1.0f });
         }
         m_DebugDraw->Flush(vp);
     }

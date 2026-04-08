@@ -28,8 +28,18 @@ namespace DefinitelyEngine {
 
         // Reset to identity before traversal so uninfluenced bones stay in bind pose
         m_BoneMatrices.assign(m_Skeleton->boneCount, glm::mat4(1.0f));
+        m_NodeGlobalTransforms.clear();
 
         ComputeBoneTransforms(m_Skeleton->rootNode, glm::mat4(1.0f));
+    }
+
+    bool Animator::TryGetNodeGlobalTransform(const std::string& nodeName, glm::mat4& outTransform) const {
+        auto it = m_NodeGlobalTransforms.find(nodeName);
+        if (it == m_NodeGlobalTransforms.end())
+            return false;
+
+        outTransform = it->second;
+        return true;
     }
 
     // -------------------------------------------------------------------------
@@ -52,6 +62,7 @@ namespace DefinitelyEngine {
         }
 
         glm::mat4 globalTransform = parentTransform * nodeTransform;
+        m_NodeGlobalTransforms[node.name] = globalTransform;
 
         // Write final bone matrix if this node corresponds to a bone
         auto boneIt = m_Skeleton->boneInfoMap.find(node.name);
