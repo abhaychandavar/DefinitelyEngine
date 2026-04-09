@@ -15,7 +15,27 @@ namespace DefinitelyEngine {
         glAttachShader(m_ProgramID, vs);
         glAttachShader(m_ProgramID, fs);
         glLinkProgram(m_ProgramID);
+        int linkStatus = GL_FALSE;
+        glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &linkStatus);
+        if (linkStatus == GL_FALSE) {
+            int length = 0;
+            glGetProgramiv(m_ProgramID, GL_INFO_LOG_LENGTH, &length);
+            std::string message;
+            message.resize((size_t)glm::max(length, 1));
+            glGetProgramInfoLog(m_ProgramID, length, &length, message.data());
+            DE_CORE_ERROR("Shader link error: {0}", message);
+        }
         glValidateProgram(m_ProgramID);
+        int validateStatus = GL_FALSE;
+        glGetProgramiv(m_ProgramID, GL_VALIDATE_STATUS, &validateStatus);
+        if (validateStatus == GL_FALSE) {
+            int length = 0;
+            glGetProgramiv(m_ProgramID, GL_INFO_LOG_LENGTH, &length);
+            std::string message;
+            message.resize((size_t)glm::max(length, 1));
+            glGetProgramInfoLog(m_ProgramID, length, &length, message.data());
+            DE_CORE_WARN("Shader validate warning: {0}", message);
+        }
 
         glDeleteShader(vs);
         glDeleteShader(fs);

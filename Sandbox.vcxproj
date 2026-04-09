@@ -113,6 +113,7 @@ xcopy /Q /E /Y /I $(ProjectDir)Sandbox\Assets bin\Release-windows-x86_64\$(Proje
     <ClInclude Include="Sandbox\src\Game\Entities\Triangle.h" />
     <ClInclude Include="Sandbox\src\Game\GameLayer.h" />
     <ClInclude Include="Sandbox\src\Game\MainCamera.h" />
+    <ClInclude Include="Sandbox\src\Game\Zombie.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sandbox\src\Editor\EditorLayer.cpp" />
@@ -124,6 +125,7 @@ xcopy /Q /E /Y /I $(ProjectDir)Sandbox\Assets bin\Release-windows-x86_64\$(Proje
     <ClCompile Include="Sandbox\src\Game\Entities\Triangle.cpp" />
     <ClCompile Include="Sandbox\src\Game\GameLayer.cpp" />
     <ClCompile Include="Sandbox\src\Game\MainCamera.cpp" />
+    <ClCompile Include="Sandbox\src\Game\Zombie.cpp" />
     <ClCompile Include="Sandbox\src\Sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>

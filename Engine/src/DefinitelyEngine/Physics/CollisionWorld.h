@@ -37,7 +37,8 @@ namespace DefinitelyEngine {
         const std::vector<Contact>& GetContacts() const { return m_Contacts; }
 
         // Returns true if any collider is hit within maxDist. outHit is only valid on true.
-        bool Raycast(const Ray& ray, float maxDist, RaycastHit& outHit) const;
+        // If excludeTag is non-empty, colliders with that tag are skipped.
+        bool Raycast(const Ray& ray, float maxDist, RaycastHit& outHit, const std::string& excludeTag = "") const;
 
     private:
         bool ShouldIgnore(const std::string& tagA, const std::string& tagB) const;

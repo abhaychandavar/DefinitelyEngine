@@ -25,6 +25,9 @@
     <Filter Include="DefinitelyEngine\Model">
       <UniqueIdentifier>{28485BDC-1442-842E-FDAE-1A3FE947EA9A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DefinitelyEngine\Particles">
+      <UniqueIdentifier>{BE571D76-AA67-C946-1321-2E65FF4FB8DF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DefinitelyEngine\Physics">
       <UniqueIdentifier>{5A3C6C38-4661-BBB8-6FAC-A0485B30BAD6}</UniqueIdentifier>
     </Filter>
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h">
       <Filter>DefinitelyEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\src\DefinitelyEngine\Particles\ParticleSystem.h">
+      <Filter>DefinitelyEngine\Particles</Filter>
     </ClInclude>
     <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Collider.h">
       <Filter>DefinitelyEngine\Physics</Filter>
@@ -264,6 +270,9 @@
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Model\Model.cpp">
       <Filter>DefinitelyEngine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\src\DefinitelyEngine\Particles\ParticleSystem.cpp">
+      <Filter>DefinitelyEngine\Particles</Filter>
     </ClCompile>
     <ClCompile Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.cpp">
       <Filter>DefinitelyEngine\Physics</Filter>

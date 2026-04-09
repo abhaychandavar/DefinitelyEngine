@@ -34,6 +34,10 @@ namespace DefinitelyEngine {
             s_RendererAPI->SetViewport(x, y, width, height);
         }
 
+        inline static void SetPointSize(float size) {
+            s_RendererAPI->SetPointSize(size);
+        }
+
     private:
         static RendererAPI* s_RendererAPI;
     };

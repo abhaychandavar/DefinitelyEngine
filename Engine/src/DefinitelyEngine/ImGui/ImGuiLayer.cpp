@@ -47,8 +47,6 @@ namespace DefinitelyEngine {
 
     void ImGuiLayer::OnImGuiRender()
     {
-        bool show = true;
-        ImGui::ShowDemoWindow(&show);
     }
 
     ImGuiContext* ImGuiLayer::GetContext()

@@ -129,12 +129,72 @@ namespace DefinitelyEngine {
         return true;
     }
 
-    bool CollisionWorld::Raycast(const Ray& ray, float maxDist, RaycastHit& outHit) const {
+    static bool TestCapsule(const CapsuleCollider& capsule, const Ray& ray, float maxDist,
+                            RaycastHit& outHit) {
+        const glm::vec3 base = capsule.worldCenter - glm::vec3(0.0f, capsule.height * 0.5f, 0.0f);
+        const glm::vec3 top  = capsule.worldCenter + glm::vec3(0.0f, capsule.height * 0.5f, 0.0f);
+        const glm::vec3 segment = top - base;
+        const glm::vec3 fromBaseToOrigin = ray.origin - base;
+
+        const float a = glm::dot(ray.direction, ray.direction);
+        const float b = glm::dot(ray.direction, segment);
+        const float c = glm::dot(segment, segment);
+        const float d = glm::dot(ray.direction, fromBaseToOrigin);
+        const float e = glm::dot(segment, fromBaseToOrigin);
+        const float denom = a * c - b * b;
+
+        float rayT = 0.0f;
+        float segT = 0.0f;
+
+        if (glm::abs(denom) > 1e-6f) {
+            rayT = (b * e - c * d) / denom;
+            segT = (a * e - b * d) / denom;
+        } else {
+            segT = e / glm::max(c, 1e-6f);
+        }
+
+        rayT = glm::max(rayT, 0.0f);
+        segT = glm::clamp(segT, 0.0f, 1.0f);
+
+        const glm::vec3 closestRayPoint = ray.origin + ray.direction * rayT;
+        const glm::vec3 closestSegmentPoint = base + segment * segT;
+        const glm::vec3 delta = closestRayPoint - closestSegmentPoint;
+        const float distSq = glm::dot(delta, delta);
+        const float radiusSq = capsule.radius * capsule.radius;
+
+        if (distSq > radiusSq)
+            return false;
+
+        const float reach = glm::sqrt(glm::max(radiusSq - distSq, 0.0f));
+        float hitDistance = rayT - reach;
+        if (hitDistance < 0.0f)
+            hitDistance = rayT + reach;
+
+        if (hitDistance < 0.0f || hitDistance > maxDist)
+            return false;
+
+        outHit.distance = hitDistance;
+        outHit.point = ray.origin + ray.direction * hitDistance;
+
+        glm::vec3 projectedPoint = outHit.point;
+        projectedPoint.y = glm::clamp(projectedPoint.y, base.y, top.y);
+        glm::vec3 normal = outHit.point - projectedPoint;
+        if (glm::dot(normal, normal) < 1e-6f) {
+            normal = glm::vec3(0.0f, 1.0f, 0.0f);
+        } else {
+            normal = glm::normalize(normal);
+        }
+        outHit.normal = normal;
+        return true;
+    }
+
+    bool CollisionWorld::Raycast(const Ray& ray, float maxDist, RaycastHit& outHit, const std::string& excludeTag) const {
         float      bestDist = maxDist;
         RaycastHit bestHit  = {};
         bool       anyHit   = false;
 
         for (Collider* c : m_Colliders) {
+            if (!excludeTag.empty() && c->tag == excludeTag) continue;
             if (c->GetType() == ColliderType::Capsule) {
                 // TODO: ray vs capsule not yet implemented — capsules are transparent to raycasts.
                 // Future: infinite-cylinder test + hemispherical end-cap tests.

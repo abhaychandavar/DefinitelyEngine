@@ -137,6 +137,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClInclude Include="Engine\src\DefinitelyEngine\Log.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Model\Model.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\MouseButtonCodes.h" />
+    <ClInclude Include="Engine\src\DefinitelyEngine\Particles\ParticleSystem.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Collider.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.h" />
     <ClInclude Include="Engine\src\DefinitelyEngine\Physics\Ray.h" />
@@ -182,6 +183,7 @@ IF EXIST bin\Release-windows-x86_64\Engine\Engine.dll\ (xcopy /Q /E /Y /I bin\Re
     <ClCompile Include="Engine\src\DefinitelyEngine\LayerStack.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Log.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Model\Model.cpp" />
+    <ClCompile Include="Engine\src\DefinitelyEngine\Particles\ParticleSystem.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Physics\CollisionWorld.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\IndexBuffer.cpp" />
     <ClCompile Include="Engine\src\DefinitelyEngine\Renderer\Mesh.cpp" />

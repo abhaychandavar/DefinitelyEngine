@@ -6,21 +6,28 @@ MainCamera::MainCamera(float fov, float aspectRatio, float nearClip, float farCl
     : m_Camera(fov, aspectRatio, nearClip, farClip)
 {
     m_Camera.SetPosition({ 0.0f, 1.6f, 3.0f });
+    m_Camera.SetRotation(m_BaseYaw, m_BasePitch);
     DefinitelyEngine::Application::Get().GetWindow().SetCursorLocked(true);
 }
 
+void MainCamera::TriggerShotShake() {
+    m_ShotShakePitch += 1.6f;
+    m_ShotShakeYaw   += (((float)rand() / (float)RAND_MAX) - 0.5f) * 0.8f;
+    m_ShotShakePitch = glm::clamp(m_ShotShakePitch, -4.0f, 4.0f);
+    m_ShotShakeYaw   = glm::clamp(m_ShotShakeYaw, -2.0f, 2.0f);
+}
+
 void MainCamera::OnUpdate(float dt) {
-    // Escape toggles cursor lock
     const bool isEscPressed = DefinitelyEngine::Input::IsKeyPressed(DE_KEY_ESCAPE);
     if (isEscPressed && !m_WasEscapePressed) {
         m_CursorLocked = !m_CursorLocked;
         DefinitelyEngine::Application::Get().GetWindow().SetCursorLocked(m_CursorLocked);
-        m_FirstMouse = true;  // avoid jump on re-lock
+        m_FirstMouse = true;
     }
     m_WasEscapePressed = isEscPressed;
 
-    float yaw   = m_Camera.GetYaw();
-    float pitch = m_Camera.GetPitch();
+    float yaw   = m_BaseYaw;
+    float pitch = m_BasePitch;
 
     if (m_CursorLocked) {
         float mouseX = DefinitelyEngine::Input::GetMouseX();
@@ -39,14 +46,22 @@ void MainCamera::OnUpdate(float dt) {
 
         yaw += dx;
         pitch = glm::clamp(pitch + dy, -89.0f, 89.0f);
-        m_Camera.SetRotation(yaw, pitch);
     }
+
+    m_BaseYaw = yaw;
+    m_BasePitch = pitch;
+
+    const float shakeBlend = 1.0f - glm::exp(-20.0f * dt);
+    m_ShotShakeYaw = glm::mix(m_ShotShakeYaw, 0.0f, shakeBlend);
+    m_ShotShakePitch = glm::mix(m_ShotShakePitch, 0.0f, shakeBlend);
+    m_Camera.SetRotation(
+        m_BaseYaw + m_ShotShakeYaw,
+        glm::clamp(m_BasePitch + m_ShotShakePitch, -89.0f, 89.0f));
 
     glm::vec3 currPos = m_Camera.GetPosition();
 
-    // Flat horizontal front vector (yaw only) — W/S must not change Y so gravity can work.
     glm::vec3 flatFront = glm::normalize(glm::vec3(
-        glm::cos(glm::radians(yaw)), 0.0f, glm::sin(glm::radians(yaw))));
+        glm::cos(glm::radians(m_BaseYaw)), 0.0f, glm::sin(glm::radians(m_BaseYaw))));
     glm::vec3 right = glm::normalize(glm::cross(flatFront, { 0.0f, 1.0f, 0.0f }));
 
     bool isWPressed = DefinitelyEngine::Input::IsKeyPressed(DE_KEY_W);
@@ -60,7 +75,7 @@ void MainCamera::OnUpdate(float dt) {
     if (isSPressed) {
         m_Camera.SetPosition(currPos - flatFront * 5.0f * dt);
     }
-    
+
     if (isDPressed) {
         m_Camera.SetPosition(currPos + right * 5.0f * dt);
     }

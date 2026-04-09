@@ -26,6 +26,8 @@ namespace DefinitelyEngine {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        glEnable(GL_PROGRAM_POINT_SIZE);
+
     }
 
     void OpenGLRendererAPI::SetClearColor(float r, float g, float b, float a) {
@@ -54,6 +56,10 @@ namespace DefinitelyEngine {
 
     void OpenGLRendererAPI::SetViewport(unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
         glViewport((GLint)x, (GLint)y, (GLsizei)width, (GLsizei)height);
+    }
+
+    void OpenGLRendererAPI::SetPointSize(float size) {
+        glPointSize(size);
     }
 
 }

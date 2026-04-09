@@ -39,6 +39,9 @@
     <ClInclude Include="Sandbox\src\Game\MainCamera.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Sandbox\src\Game\Zombie.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sandbox\src\Editor\EditorLayer.cpp">
@@ -66,6 +69,9 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Sandbox\src\Game\MainCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Sandbox\src\Game\Zombie.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Sandbox\src\Sandbox.cpp" />
