@@ -58,6 +58,36 @@ namespace DefinitelyEngine {
         return true;
     }
 
+    static bool TestBoxCapsule(const BoxCollider& box, const CapsuleCollider& capsule,
+                               glm::vec3& outNormal, float& outDepth)
+    {
+        const glm::vec3 boxMin = box.worldCenter - box.halfExtents;
+        const glm::vec3 boxMax = box.worldCenter + box.halfExtents;
+        const float capsuleYMin = capsule.worldCenter.y - capsule.height * 0.5f;
+        const float capsuleYMax = capsule.worldCenter.y + capsule.height * 0.5f;
+
+        const glm::vec3 closestOnBox = {
+            glm::clamp(capsule.worldCenter.x, boxMin.x, boxMax.x),
+            glm::clamp(capsule.worldCenter.y, boxMin.y, boxMax.y),
+            glm::clamp(capsule.worldCenter.z, boxMin.z, boxMax.z)
+        };
+
+        const glm::vec3 closestOnCapsule = {
+            capsule.worldCenter.x,
+            glm::clamp(closestOnBox.y, capsuleYMin, capsuleYMax),
+            capsule.worldCenter.z
+        };
+
+        const glm::vec3 delta = closestOnCapsule - closestOnBox;
+        const float dist = glm::length(delta);
+        if (dist >= capsule.radius)
+            return false;
+
+        outDepth = capsule.radius - dist;
+        outNormal = (dist < 1e-6f) ? glm::vec3(0.0f, 1.0f, 0.0f) : (delta / dist);
+        return true;
+    }
+
     void CollisionWorld::Update() {
         m_Contacts.clear();
 
@@ -69,17 +99,34 @@ namespace DefinitelyEngine {
                 if (ShouldIgnore(ca->tag, cb->tag)) continue;
 
                 // Capsule vs Capsule only — ground plane collision is handled by raycasts.
-                if (ca->GetType() != ColliderType::Capsule) continue;
-                if (cb->GetType() != ColliderType::Capsule) continue;
-
                 glm::vec3 normal;
                 float     depth;
-                if (TestCapsuleCapsule(
-                        *static_cast<CapsuleCollider*>(ca),
-                        *static_cast<CapsuleCollider*>(cb),
-                        normal, depth))
-                {
-                    m_Contacts.push_back({ ca, cb, normal, depth });
+                if (ca->GetType() == ColliderType::Capsule && cb->GetType() == ColliderType::Capsule) {
+                    if (TestCapsuleCapsule(
+                            *static_cast<CapsuleCollider*>(ca),
+                            *static_cast<CapsuleCollider*>(cb),
+                            normal, depth))
+                    {
+                        m_Contacts.push_back({ ca, cb, normal, depth });
+                    }
+                } else if (ca->GetType() == ColliderType::Box && cb->GetType() == ColliderType::Capsule
+                           && (ca->isTrigger || cb->isTrigger)) {
+                    if (TestBoxCapsule(
+                            *static_cast<BoxCollider*>(ca),
+                            *static_cast<CapsuleCollider*>(cb),
+                            normal, depth))
+                    {
+                        m_Contacts.push_back({ ca, cb, normal, depth });
+                    }
+                } else if (ca->GetType() == ColliderType::Capsule && cb->GetType() == ColliderType::Box
+                           && (ca->isTrigger || cb->isTrigger)) {
+                    if (TestBoxCapsule(
+                            *static_cast<BoxCollider*>(cb),
+                            *static_cast<CapsuleCollider*>(ca),
+                            normal, depth))
+                    {
+                        m_Contacts.push_back({ ca, cb, -normal, depth });
+                    }
                 }
             }
         }

@@ -1,6 +1,11 @@
 #include "Zombie.h"
+#include <cstdlib>
 
 namespace {
+    float Rand01() {
+        return (float)rand() / (float)RAND_MAX;
+    }
+
     glm::vec3 ExtractTranslation(const glm::mat4& transform) {
         return glm::vec3(transform[3]);
     }
@@ -24,6 +29,10 @@ Zombie::Zombie(DefinitelyEngine::AnimatedModel* model,
     m_Animator = new DefinitelyEngine::Animator(&m_Model->GetSkeleton());
     if (m_RunClip)
         m_Animator->SetClip(m_RunClip);
+
+    m_SpeedMultiplier = 1.0f + Rand01() * 0.5f;
+    m_ApproachSideBias = -1.5f + Rand01() * 3.0f;
+    m_PreferredAttackDistance = 0.9f + Rand01() * 0.8f;
 }
 
 Zombie::~Zombie() {
@@ -90,24 +99,32 @@ void Zombie::UpdateAI(float dt,
         return;
 
     glm::vec3& zombiePos = objects[m_ObjectIndex].transform.position;
-    float dx = playerPos.x - zombiePos.x;
-    float dz = playerPos.z - zombiePos.z;
-    float xzDist = glm::sqrt(dx * dx + dz * dz);
+    glm::vec2 toPlayer = { playerPos.x - zombiePos.x, playerPos.z - zombiePos.z };
+    float xzDist = glm::length(toPlayer);
 
     if (xzDist > 0.01f)
-        objects[m_ObjectIndex].transform.rotation.y = glm::degrees(glm::atan(dx, dz));
+        objects[m_ObjectIndex].transform.rotation.y = glm::degrees(glm::atan(toPlayer.x, toPlayer.y));
+
+    glm::vec2 forward2D = xzDist > 0.001f ? (toPlayer / xzDist) : glm::vec2(0.0f, 1.0f);
+    glm::vec2 right2D = { -forward2D.y, forward2D.x };
+    glm::vec2 desiredTargetXZ = {
+        playerPos.x + right2D.x * m_ApproachSideBias,
+        playerPos.z + right2D.y * m_ApproachSideBias
+    };
+    glm::vec2 desiredDelta = desiredTargetXZ - glm::vec2(zombiePos.x, zombiePos.z);
+    float desiredDist = glm::length(desiredDelta);
+    glm::vec2 desiredDir = desiredDist > 0.001f ? (desiredDelta / desiredDist) : forward2D;
 
     const bool inAttackRange = xzDist < attackRange;
-    const float followStopDistance = glm::max(attackRange, m_BodyCollider->radius + 0.45f);
+    const float followStopDistance = glm::max(m_PreferredAttackDistance, m_BodyCollider->radius + 0.45f);
+    const float actualSpeed = moveSpeed * m_SpeedMultiplier;
+    const float attackLungeSpeed = actualSpeed * 0.65f;
 
     if (m_State == State::Attacking) {
-        if (!inAttackRange) {
-            m_State = State::Follow;
-            m_AttackTimeLeft = 0.0f;
-            m_AttackCooldown = 0.0f;
-            m_HandHitLoggedThisAttack = false;
-            if (m_RunClip) m_Animator->SetClip(m_RunClip);
-        } else if (m_AttackTimeLeft > 0.0f) {
+        if (m_AttackTimeLeft > 0.0f) {
+            m_AttackLungeDirection = xzDist > 0.001f ? forward2D : m_AttackLungeDirection;
+            zombiePos.x += m_AttackLungeDirection.x * attackLungeSpeed * dt;
+            zombiePos.z += m_AttackLungeDirection.y * attackLungeSpeed * dt;
             m_AttackTimeLeft -= dt;
             if (m_AttackTimeLeft <= 0.0f) {
                 m_AttackTimeLeft = 0.0f;
@@ -132,11 +149,11 @@ void Zombie::UpdateAI(float dt,
             m_AttackTimeLeft = m_AttackDuration;
             m_AttackCooldown = 0.0f;
             m_HandHitLoggedThisAttack = false;
+            m_AttackLungeDirection = xzDist > 0.001f ? forward2D : m_AttackLungeDirection;
             m_Animator->SetClip(m_AttackClip, false);
-        } else if (xzDist > followStopDistance) {
-            float invDist = 1.0f / xzDist;
-            zombiePos.x += dx * invDist * moveSpeed * dt;
-            zombiePos.z += dz * invDist * moveSpeed * dt;
+        } else if (desiredDist > followStopDistance) {
+            zombiePos.x += desiredDir.x * actualSpeed * dt;
+            zombiePos.z += desiredDir.y * actualSpeed * dt;
         }
     }
 }

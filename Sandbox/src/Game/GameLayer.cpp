@@ -2,6 +2,8 @@
 #include "DefinitelyEngine/Input.h"
 #include "DefinitelyEngine/Events/WindowResizeEvent.h"
 
+#include <iomanip>
+#include <sstream>
 #include <string>
 
 static DefinitelyEngine::EmitterConfig MakeBloodHitConfig() {
@@ -96,12 +98,6 @@ GameLayer::GameLayer()
     m_ZombieAttackDuration = GetClipDurationSeconds(m_ZombieAttackClip);
     m_ZombieAttackHitLogStartTime = glm::min(m_ZombieAttackDuration, kAttackHitLogStartFrame / kAssumedFrameRate);
 
-    m_LeftArmModel    = new DefinitelyEngine::AnimatedModel("Assets/Models/mcLeftArm.fbx");
-    m_LeftArmAnimator = new DefinitelyEngine::Animator(&m_LeftArmModel->GetSkeleton());
-    m_LeftArmIdleClip  = m_LeftArmModel->GetClip("LeftArmIdle");
-    m_LeftArmPunchClip = m_LeftArmModel->GetClip("Punch");
-    if (m_LeftArmIdleClip) m_LeftArmAnimator->SetClip(m_LeftArmIdleClip);
-
     m_RightArmModel    = new DefinitelyEngine::AnimatedModel("Assets/Models/mcRightArm.fbx");
     m_RightArmAnimator = new DefinitelyEngine::Animator(&m_RightArmModel->GetSkeleton());
     m_RightArmIdleClip = m_RightArmModel->GetClip("ShootIdle");
@@ -113,20 +109,6 @@ GameLayer::GameLayer()
         if (const auto* rightHandBone = FindBoneNodeByName(zombieSkeleton.rootNode, kZombieRightHandBoneName)) {
             DE_TRACE("Zombie bone found at startup: {0}", rightHandBone->name);
         }
-    }
-
-    {
-        DefinitelyEngine::GameObject obj;
-        obj.name = "Left Arm";
-        obj.viewSpace = true;
-        obj.transform.position = { -0.500f, -0.320f, -0.550f };
-        obj.transform.rotation = { 0.0f, 73.0f, 0.0f };
-        obj.transform.scale    = 0.01f;
-        obj.onRender = [this](const glm::mat4& vp, const glm::mat4& t) {
-            m_LeftArmModel->Draw(vp, t, m_LeftArmAnimator->GetBoneMatrices());
-        };
-        m_Objects.push_back(std::move(obj));
-        m_LeftArmObjectIndex = (int)m_Objects.size() - 1;
     }
 
     {
@@ -148,7 +130,7 @@ GameLayer::GameLayer()
         DefinitelyEngine::GameObject obj;
         obj.name = "Plane";
         obj.transform.position = { 0.0f, 0.0f, 0.0f };
-        obj.transform.scale = 900.0f;
+        obj.transform.scale = kGroundStartSize;
         obj.onRender = [this](const glm::mat4& vp, const glm::mat4& t) {
             m_Plane->Render(vp, t);
         };
@@ -159,9 +141,17 @@ GameLayer::GameLayer()
     m_PlaneCollider = new DefinitelyEngine::BoxCollider();
     m_PlaneCollider->ownerName   = "Plane";
     m_PlaneCollider->tag         = "Ground";
-    m_PlaneCollider->halfExtents = { 450.0f, 0.05f, 450.0f };
+    m_PlaneCollider->halfExtents = { kGroundStartSize * 0.5f, 0.05f, kGroundStartSize * 0.5f };
     m_Objects[m_PlaneObjectIndex].collider = m_PlaneCollider;
     m_CollisionWorld.Register(m_PlaneCollider);
+
+    m_FallKillCollider = new DefinitelyEngine::BoxCollider();
+    m_FallKillCollider->ownerName = "FallKillTrigger";
+    m_FallKillCollider->tag = "FallKill";
+    m_FallKillCollider->isTrigger = true;
+    m_FallKillCollider->worldCenter = { 0.0f, -20.0f, 0.0f };
+    m_FallKillCollider->halfExtents = { 30.0f, 1.0f, 30.0f };
+    m_CollisionWorld.Register(m_FallKillCollider);
 
     {
         DefinitelyEngine::GameObject obj;
@@ -233,11 +223,10 @@ GameLayer::~GameLayer() {
     delete m_GunModel;
     delete m_Plane;
     delete m_ZombieModel;
-    delete m_LeftArmAnimator;
-    delete m_LeftArmModel;
     delete m_RightArmAnimator;
     delete m_RightArmModel;
     delete m_PlaneCollider;
+    delete m_FallKillCollider;
     delete m_PlayerCollider;
     delete m_DebugDraw;
     delete m_Particles;
@@ -247,8 +236,8 @@ void GameLayer::SpawnZombiesInCircle(int count) {
     if (count <= 0)
         return;
 
-    const glm::vec3 center = m_Camera.GetCamera().GetPosition();
-    const float radius = kWaveSpawnRadius;
+    const glm::vec3 center = { 0.0f, 0.0f, 0.0f };
+    const float radius = glm::max(6.0f, m_Objects[m_PlaneObjectIndex].transform.scale * 0.35f);
     const float angleStep = glm::two_pi<float>() / (float)count;
 
     for (int i = 0; i < count; ++i) {
@@ -273,6 +262,14 @@ void GameLayer::SpawnZombiesInCircle(int count) {
     }
 }
 
+void GameLayer::UpdateGroundForWave() {
+    const float groundSize = glm::max(
+        kGroundMinSize,
+        kGroundStartSize - (float)(m_CurrentWave - 1) * kGroundMinSize);
+    m_Objects[m_PlaneObjectIndex].transform.scale = groundSize;
+    m_PlaneCollider->halfExtents = { groundSize * 0.5f, 0.05f, groundSize * 0.5f };
+}
+
 int GameLayer::CountAliveZombies() const {
     int alive = 0;
     for (const auto& zombie : m_Zombies) {
@@ -289,6 +286,7 @@ void GameLayer::StartNextWave() {
     m_WaveCountdownActive = false;
     m_NextWaveTimer = 0.0f;
     m_WaveBannerTimer = kWaveBannerDuration;
+    UpdateGroundForWave();
     SpawnZombiesInCircle(spawnCount);
 }
 
@@ -301,6 +299,9 @@ Zombie* GameLayer::FindZombieByCollider(const DefinitelyEngine::Collider* collid
 }
 
 void GameLayer::OnUpdate(float dt) {
+    if (!m_PlayerDead)
+        m_SurvivalTime += dt;
+
     if (m_WaveBannerTimer > 0.0f)
         m_WaveBannerTimer = glm::max(0.0f, m_WaveBannerTimer - dt);
 
@@ -313,86 +314,57 @@ void GameLayer::OnUpdate(float dt) {
     const bool lmbJustPressed = isLmbPressed && !m_WasLmbPressed;
     m_WasLmbPressed = isLmbPressed;
 
-    if (lmbJustPressed) {
-        m_RightArmRecoilZ = 0.15f;
-        m_Camera.TriggerShotShake();
+    if (!m_PlayerDead) {
+        if (lmbJustPressed) {
+            m_RightArmRecoilZ = 0.15f;
+            m_Camera.TriggerShotShake();
 
-        const DefinitelyEngine::PerspectiveCamera& playerCamera = m_Camera.GetCamera();
-        if (m_Particles && m_GunMuzzleObjectIndex >= 0) {
-            const glm::mat4 rightArmTransform = m_Objects[m_RightArmObjectIndex].transform.GetMatrix();
-            glm::mat4 handBoneTransform(1.0f);
-            if (!(m_RightArmAnimator
-                && m_RightArmAnimator->TryGetNodeGlobalTransform(kPlayerRightHandBoneName, handBoneTransform))) {
-                handBoneTransform = glm::mat4(1.0f);
+            const DefinitelyEngine::PerspectiveCamera& playerCamera = m_Camera.GetCamera();
+            if (m_Particles && m_GunMuzzleObjectIndex >= 0) {
+                const glm::mat4 rightArmTransform = m_Objects[m_RightArmObjectIndex].transform.GetMatrix();
+                glm::mat4 handBoneTransform(1.0f);
+                if (!(m_RightArmAnimator
+                    && m_RightArmAnimator->TryGetNodeGlobalTransform(kPlayerRightHandBoneName, handBoneTransform))) {
+                    handBoneTransform = glm::mat4(1.0f);
+                }
+
+                const glm::mat4 gunViewTransform =
+                    rightArmTransform
+                    * handBoneTransform
+                    * m_Objects[m_GunObjectIndex].transform.GetMatrix()
+                    * m_Objects[m_GunMuzzleObjectIndex].transform.GetMatrix();
+                const glm::vec3 muzzleViewPos = TransformPoint(gunViewTransform, glm::vec3(0.0f));
+                const glm::mat4 inverseView = glm::inverse(playerCamera.GetViewMatrix());
+                const glm::vec3 muzzleWorldPos = TransformPoint(inverseView, muzzleViewPos);
+                m_Particles->Emit(muzzleWorldPos, GetCameraForward(playerCamera), kGunMuzzle);
             }
 
-            const glm::mat4 gunViewTransform =
-                rightArmTransform
-                * handBoneTransform
-                * m_Objects[m_GunObjectIndex].transform.GetMatrix()
-                * m_Objects[m_GunMuzzleObjectIndex].transform.GetMatrix();
-            const glm::vec3 muzzleViewPos = TransformPoint(gunViewTransform, glm::vec3(0.0f));
-            const glm::mat4 inverseView = glm::inverse(playerCamera.GetViewMatrix());
-            const glm::vec3 muzzleWorldPos = TransformPoint(inverseView, muzzleViewPos);
-            m_Particles->Emit(muzzleWorldPos, GetCameraForward(playerCamera), kGunMuzzle);
-        }
-
-        DefinitelyEngine::Ray shotRay = { playerCamera.GetPosition(), GetCameraForward(playerCamera) };
-        DefinitelyEngine::RaycastHit shotHit;
-        if (m_CollisionWorld.Raycast(shotRay, 100.0f, shotHit) && shotHit.tag == "Enemy") {
-            if (Zombie* zombie = FindZombieByCollider(shotHit.collider)) {
-                zombie->ApplyShotDamage(
-                    40.0f,
-                    m_CollisionWorld,
-                    m_Objects,
-                    m_Particles,
-                    kBloodHit,
-                    kZombieDeath,
-                    shotHit,
-                    -GetCameraForward(playerCamera));
+            DefinitelyEngine::Ray shotRay = { playerCamera.GetPosition(), GetCameraForward(playerCamera) };
+            DefinitelyEngine::RaycastHit shotHit;
+            if (m_CollisionWorld.Raycast(shotRay, 100.0f, shotHit) && shotHit.tag == "Enemy") {
+                if (Zombie* zombie = FindZombieByCollider(shotHit.collider)) {
+                    zombie->ApplyShotDamage(
+                        40.0f,
+                        m_CollisionWorld,
+                        m_Objects,
+                        m_Particles,
+                        kBloodHit,
+                        kZombieDeath,
+                        shotHit,
+                        -GetCameraForward(playerCamera));
+                }
             }
         }
+
     }
-
     m_RightArmRecoilZ = glm::mix(m_RightArmRecoilZ, 0.0f, 1.0f - glm::exp(-20.0f * dt));
     m_Objects[m_RightArmObjectIndex].transform.position.z = -0.700f + m_RightArmRecoilZ;
-
-    const bool isRightMousePressed = DefinitelyEngine::Input::IsMouseButtonPressed(DE_MOUSE_BUTTON_RIGHT);
-    const bool leftMouseJustPressed = isRightMousePressed && !m_WasLeftMousePressed;
-    m_WasLeftMousePressed = isRightMousePressed;
-
-    if (leftMouseJustPressed && m_LeftArmAnimator && m_LeftArmPunchClip) {
-        m_LeftArmAnimator->SetClip(m_LeftArmPunchClip, false);
-        m_LeftArmPunchTimeRemaining = GetClipDurationSeconds(m_LeftArmPunchClip);
-        m_RightArmTargetRotZ = -90.0f;
-        m_RightArmShootTimer = 0.3f;
-    }
-
-    if (m_RightArmShootTimer > 0.0f) {
-        m_RightArmShootTimer -= dt;
-        if (m_RightArmShootTimer <= 0.0f) {
-            m_RightArmTargetRotZ = 0.0f;
-            m_RightArmShootTimer = 0.0f;
-        }
-    }
-
-    m_Objects[m_RightArmObjectIndex].transform.rotation.z = glm::mix(
-        m_Objects[m_RightArmObjectIndex].transform.rotation.z, m_RightArmTargetRotZ, 1.0f - glm::exp(-15.0f * dt));
-
-    if (m_LeftArmPunchTimeRemaining > 0.0f) {
-        m_LeftArmPunchTimeRemaining -= dt;
-        if (m_LeftArmPunchTimeRemaining <= 0.0f && m_LeftArmAnimator && m_LeftArmIdleClip) {
-            m_LeftArmAnimator->SetClip(m_LeftArmIdleClip);
-            m_LeftArmPunchTimeRemaining = 0.0f;
-        }
-    }
-
-    if (m_LeftArmAnimator)  m_LeftArmAnimator->Update(dt);
     if (m_RightArmAnimator) m_RightArmAnimator->Update(dt);
 
-    m_Camera.OnUpdate(dt);
+    if (!m_PlayerDead)
+        m_Camera.OnUpdate(dt);
 
-    {
+    if (!m_PlayerDead) {
         glm::vec3 camPos = m_Camera.GetCamera().GetPosition();
         float feetY = camPos.y - kPlayerEyeHeight;
 
@@ -416,7 +388,7 @@ void GameLayer::OnUpdate(float dt) {
 
     {
         const bool isSpacePressed = DefinitelyEngine::Input::IsKeyPressed(DE_KEY_SPACE);
-        if (isSpacePressed && !m_WasSpacePressed && m_PlayerGrounded) {
+        if (!m_PlayerDead && isSpacePressed && !m_WasSpacePressed && m_PlayerGrounded) {
             m_PlayerVertVelocity = kJumpImpulse;
             m_PlayerGrounded     = false;
         }
@@ -435,9 +407,10 @@ void GameLayer::OnUpdate(float dt) {
         zombie->SyncColliders(m_Objects, kZombieRightHandBoneName);
     }
 
-    if (CountAliveZombies() == 0) {
+    if (!m_PlayerDead && CountAliveZombies() == 0) {
         if (!m_WaveCountdownActive) {
             m_WaveCountdownActive = true;
+            m_WavesCompleted = glm::max(m_WavesCompleted, m_CurrentWave);
             m_NextWaveTimer = kWaveCountdownDuration;
         } else {
             m_NextWaveTimer = glm::max(0.0f, m_NextWaveTimer - dt);
@@ -457,8 +430,18 @@ void GameLayer::OnUpdate(float dt) {
     m_CollisionWorld.Update();
 
     for (const auto& contact : m_CollisionWorld.GetContacts()) {
-        for (const auto& zombie : m_Zombies)
-            m_PlayerHealth = glm::max(0.0f, m_PlayerHealth - zombie->TryApplyPlayerHit(contact, m_PlayerCollider, m_Camera.GetCamera(), m_Particles, kPlayerHit, m_ZombieDamagePerHit));
+        const bool fallKillContact =
+            (contact.a == m_FallKillCollider && contact.b == m_PlayerCollider) ||
+            (contact.b == m_FallKillCollider && contact.a == m_PlayerCollider);
+        if (!m_PlayerDead && fallKillContact) {
+            m_PlayerHealth = 0.0f;
+            continue;
+        }
+
+        if (!m_PlayerDead) {
+            for (const auto& zombie : m_Zombies)
+                m_PlayerHealth = glm::max(0.0f, m_PlayerHealth - zombie->TryApplyPlayerHit(contact, m_PlayerCollider, m_Camera.GetCamera(), m_Particles, kPlayerHit, m_ZombieDamagePerHit));
+        }
 
         bool zombiePlayerBodyContact = false;
         for (const auto& zombie : m_Zombies) {
@@ -478,15 +461,26 @@ void GameLayer::OnUpdate(float dt) {
         for (auto& obj : m_Objects) {
             if (!obj.collider) continue;
             if (obj.collider == contact.a) {
+                if (m_PlayerDead && obj.collider == m_PlayerCollider)
+                    continue;
                 obj.transform.position += push;
                 if (obj.collider == m_PlayerCollider)
                     m_Camera.GetCamera().SetPosition(obj.transform.position);
             } else if (obj.collider == contact.b) {
+                if (m_PlayerDead && obj.collider == m_PlayerCollider)
+                    continue;
                 obj.transform.position -= push;
                 if (obj.collider == m_PlayerCollider)
                     m_Camera.GetCamera().SetPosition(obj.transform.position);
             }
         }
+    }
+
+    if (!m_PlayerDead && m_PlayerHealth <= 0.0f) {
+        m_PlayerDead = true;
+        m_PlayerVertVelocity = 0.0f;
+        m_WaveCountdownActive = false;
+        m_NextWaveTimer = 0.0f;
     }
 
     const DefinitelyEngine::PerspectiveCamera& camera = m_Camera.GetCamera();
@@ -569,6 +563,28 @@ void GameLayer::OnUpdate(float dt) {
             bannerText,
             { 0.0f, -40.0f },
             bannerStyle,
+            DefinitelyEngine::HudAnchor::Center);
+    }
+
+    if (m_PlayerDead) {
+        std::ostringstream survivedText;
+        survivedText << std::fixed << std::setprecision(1) << m_SurvivalTime;
+
+        m_HudRenderer.DrawQuad({ -230.0f, -120.0f, 460.0f, 170.0f }, { 0.0f, 0.0f, 0.0f, 0.75f }, DefinitelyEngine::HudAnchor::Center);
+        m_HudRenderer.DrawText(
+            "YOU ARE DEAD!",
+            { 0.0f, -95.0f },
+            { 5.0f, { 1.0f, 0.18f, 0.15f, 1.0f } },
+            DefinitelyEngine::HudAnchor::Center);
+        m_HudRenderer.DrawText(
+            "SURVIVED TIME: " + survivedText.str(),
+            { 0.0f, -18.0f },
+            { 2.0f, { 1.0f, 1.0f, 1.0f, 1.0f } },
+            DefinitelyEngine::HudAnchor::Center);
+        m_HudRenderer.DrawText(
+            "WAVES COMPLETED: " + std::to_string(m_WavesCompleted),
+            { 0.0f, 22.0f },
+            { 2.0f, { 1.0f, 0.95f, 0.75f, 1.0f } },
             DefinitelyEngine::HudAnchor::Center);
     }
     m_HudRenderer.EndFrame();

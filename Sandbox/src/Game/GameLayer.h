@@ -24,11 +24,11 @@ private:
     Zombie* FindZombieByCollider(const DefinitelyEngine::Collider* collider);
     void StartNextWave();
     int CountAliveZombies() const;
+    void UpdateGroundForWave();
 
     std::vector<DefinitelyEngine::GameObject> m_Objects;
     std::vector<std::unique_ptr<Zombie>> m_Zombies;
     int m_SelectedIndex = -1;
-    int m_LeftArmObjectIndex = -1;
     int m_RightArmObjectIndex = -1;
     int m_PlaneObjectIndex = -1;
     int m_PlayerObjectIndex = -1;
@@ -45,24 +45,16 @@ private:
     float m_ZombieAttackDuration = 0.0f;
     float m_ZombieAttackHitLogStartTime = 0.0f;
 
-    static constexpr float kZombieSpeed                  = 1.5f;
+    static constexpr float kZombieSpeed                  = 3.0f;
     static constexpr float kZombieAttackRange            = 0.8f;
     static constexpr float kZombieAttackCooldownDuration = 0.3f;
 
-    DefinitelyEngine::AnimatedModel* m_LeftArmModel     = nullptr;
-    DefinitelyEngine::Animator*      m_LeftArmAnimator  = nullptr;
     DefinitelyEngine::AnimatedModel* m_RightArmModel    = nullptr;
     DefinitelyEngine::Animator*      m_RightArmAnimator = nullptr;
 
-    const DefinitelyEngine::AnimationClip* m_LeftArmIdleClip  = nullptr;
-    const DefinitelyEngine::AnimationClip* m_LeftArmPunchClip = nullptr;
     const DefinitelyEngine::AnimationClip* m_RightArmIdleClip = nullptr;
 
-    float m_LeftArmPunchTimeRemaining = 0.0f;
-    float m_RightArmShootTimer        = 0.0f;
-    float m_RightArmTargetRotZ        = 0.0f;
     float m_RightArmRecoilZ           = 0.0f;
-    bool  m_WasLeftMousePressed       = false;
     bool  m_WasLmbPressed             = false;
 
     static constexpr float kGravity         = -9.8f;
@@ -75,9 +67,10 @@ private:
 
     DefinitelyEngine::CollisionWorld   m_CollisionWorld;
     DefinitelyEngine::BoxCollider*     m_PlaneCollider   = nullptr;
+    DefinitelyEngine::BoxCollider*     m_FallKillCollider = nullptr;
     DefinitelyEngine::CapsuleCollider* m_PlayerCollider  = nullptr;
     DefinitelyEngine::DebugDraw*       m_DebugDraw       = nullptr;
-    bool                               m_ShowColliders   = true;
+    bool                               m_ShowColliders   = false;
 
     DefinitelyEngine::ParticleSystem* m_Particles = nullptr;
 
@@ -92,8 +85,12 @@ private:
     bool  m_WaveCountdownActive = false;
     float m_WaveBannerTimer = 0.0f;
     float m_ZombieDamagePerHit = 30.0f;
+    float m_SurvivalTime = 0.0f;
+    int   m_WavesCompleted = 0;
+    bool  m_PlayerDead = false;
 
-    static constexpr float kWaveSpawnRadius = 20.0f;
+    static constexpr float kGroundMinSize = 20.0f;
+    static constexpr float kGroundStartSize = 50.0f;
     static constexpr float kWaveCountdownDuration = 4.0f;
     static constexpr float kWaveBannerDuration = 1.2f;
 };

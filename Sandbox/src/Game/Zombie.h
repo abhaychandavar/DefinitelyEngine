@@ -68,6 +68,10 @@ private:
     float m_AttackDuration = 0.0f;
     float m_AttackHitLogStartTime = 0.0f;
     glm::vec3 m_SpawnPosition = { 0.0f, 0.0f, 0.0f };
+    float m_SpeedMultiplier = 1.0f;
+    float m_ApproachSideBias = 0.0f;
+    float m_PreferredAttackDistance = 0.0f;
+    glm::vec2 m_AttackLungeDirection = { 0.0f, 1.0f };
 
     int m_ObjectIndex = -1;
     std::string m_NameSuffix;
